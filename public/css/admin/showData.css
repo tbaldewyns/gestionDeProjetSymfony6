@@ -1,0 +1,106 @@
+.container {
+  margin-top: 20px;
+}
+
+.inputs {
+  display: inline-flex;
+}
+.input {
+  margin: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 10px;
+}
+.inputs button,
+.inputs a {
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  height: 45px;
+  width: 200px;
+  background-color: white;
+  color: black;
+}
+#downloadBtn {
+  float: right;
+}
+.input button:hover {
+  opacity: 50%;
+}
+
+select {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+}
+.container canvas {
+  background-color: white;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+.charts {
+  margin-top: 20px;
+  display: inline-flex;
+  width: 650px;
+}
+
+.datas {
+  margin: 10px;
+  border-radius: 10px;
+  background-color: white;
+  padding: 30px;
+  overflow: scroll;
+  height: 400px;
+}
+.datas hr {
+  width: 500px;
+}
+.datas::-webkit-scrollbar {
+  display: none;
+}
+
+.datas td,
+.datas th {
+  padding: 25px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  text-align: center;
+  border-bottom: 1px solid;
+}
+.datas th {
+  border: 1px solid;
+  background-color: rgba(102, 192, 210, 1);
+  color: white;
+  margin: 5px;
+  padding: 5px;
+}
+
+@media screen and (max-width: 665px) {
+  .charts {
+    width: 400px;
+  }
+  .datas {
+    margin: 5px;
+    font-size: 10px;
+  }
+  .datas td,
+  .datas th {
+    padding: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    border-bottom: 1px solid;
+  }
+  .datas hr {
+    width: 300px;
+  }
+}
+
+@media screen and (max-width: 415px) {
+  .charts {
+    width: 350px;
+  }
+  .datas hr {
+    width: 200px;
+  }
+}

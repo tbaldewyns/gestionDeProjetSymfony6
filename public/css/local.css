@@ -1,0 +1,70 @@
+.container .localBorder .green,
+.container .localBorder .orange,
+.container .localBorder .red {
+  position: relative;
+  margin-top: 25px;
+  height: 300px;
+  width: 300px;
+  border-radius: 10px;
+}
+
+.container .localBorder .green,
+.container .localBorder .orange,
+.container .localBorder .red {
+  position: absolute;
+  margin-left: 23px;
+}
+
+.container .green {
+  background-color: green;
+}
+.container .orange {
+  background-color: orange;
+}
+
+.container .red {
+  background-color: red;
+}
+
+.localBorder {
+  width: 350px;
+  height: 350px;
+  border-radius: 10px;
+  margin-top: 10px;
+  background-color: white;
+}
+
+.date,
+.value {
+  color: white;
+}
+
+.date {
+  padding-top: 10px;
+  font-size: 25px;
+}
+
+.value {
+  padding-top: 15%;
+  font-size: 40px;
+  font-weight: bold;
+}
+.local {
+  color: white;
+  margin-top: 20px;
+  font-size: 20px;
+}
+.diffDate {
+  position: absolute;
+  bottom: 5%;
+}
+.diffDate p {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px;
+}
+
+#whiteText {
+  color: white;
+}

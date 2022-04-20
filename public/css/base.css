@@ -1,0 +1,105 @@
+* {
+  font-family: "Times New Roman", Times, serif;
+}
+
+.backBtn {
+  position: absolute;
+  top: 7%;
+  left: 15%;
+}
+.backBtn a svg {
+  color: white;
+  font-weight: bold;
+  height: 30px;
+}
+
+.backBtn:hover {
+  cursor: pointer;
+}
+body {
+  overflow-x: hidden;
+  background: linear-gradient(
+    39deg,
+    lightgrey 0%,
+    rgba(102, 192, 210, 1) 46%,
+    rgba(88, 177, 205, 1) 68%,
+    yellow 100%
+  );
+}
+
+.container {
+  min-height: 100vh;
+}
+.logo img {
+  height: 100px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.shapes {
+  background-color: white;
+}
+
+.shape1,
+.shape2,
+.shape3 {
+  position: fixed;
+  height: 400px;
+  width: 600px;
+  opacity: 10%;
+  z-index: -1;
+  transform: rotate(45deg);
+  background-color: white;
+  border-radius: 20px;
+}
+
+.shape1 {
+  top: 20%;
+  left: -20%;
+}
+
+.shape2 {
+  top: 10%;
+  right: -30%;
+}
+.shape3 {
+  top: 5%;
+  right: -50%;
+}
+
+@media screen and (max-width: 1000px) {
+  .shape1 {
+    height: 400px;
+    width: 600px;
+    top: 10%;
+    left: -35%;
+  }
+
+  .shape2 {
+    height: 400px;
+    width: 600px;
+    top: 10%;
+    right: -35%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .logo img {
+    height: 62px;
+  }
+  .shape1 {
+    height: 400px;
+    width: 600px;
+    top: 10%;
+    left: -55%;
+  }
+
+  .shape2 {
+    height: 400px;
+    width: 600px;
+    top: 30%;
+    right: -55%;
+  }
+}

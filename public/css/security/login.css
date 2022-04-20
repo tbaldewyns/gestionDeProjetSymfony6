@@ -1,0 +1,101 @@
+.formTitle {
+  font-size: 50px;
+  background: linear-gradient(
+    39deg,
+    lightgrey 0%,
+    rgba(102, 192, 210, 1) 46%,
+    rgba(88, 177, 205, 1) 68%,
+    yellow 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding: 30px;
+}
+.loginCard,
+.registerCard {
+  margin-top: 10px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.loginCard {
+  max-width: 400px;
+  height: 400px;
+}
+
+.registerCard {
+  max-width: 500px;
+  height: 520px;
+}
+
+.loginCard svg {
+  color: lightgrey;
+}
+
+.registerCard .accountType p {
+  color: grey;
+}
+.accountType select {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+}
+.usernameLogin input,
+.passwordLogin input,
+.loginBtn button,
+.btn button {
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px;
+  border: none;
+}
+.usernameLogin input:focus,
+.passwordLogin input:focus {
+  outline: none;
+}
+
+hr {
+  width: 250px;
+}
+
+.loginBtn button,
+.btn button {
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  height: 40px;
+  width: 250px;
+  background: rgba(102, 192, 210, 1);
+}
+
+.loginBtn button:hover,
+.btn button:hover {
+  opacity: 50%;
+  transition: 1s;
+}
+
+.names,
+.passwords {
+  display: inline-flex;
+}
+
+.names input,
+.passwords input,
+.email input,
+.accountType input {
+  margin: 10px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+}
+
+.names input:focus,
+.passwords input:focus,
+.email input:focus,
+.accountType input:focus {
+  outline: none;
+}
+
+.email input {
+  width: 350px;
+}

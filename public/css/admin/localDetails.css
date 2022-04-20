@@ -1,0 +1,142 @@
+.dataDetails {
+  margin-top: 20px;
+  display: inline-flex;
+}
+.border {
+  position: relative;
+  margin-left: 50px;
+  margin-right: 50px;
+  border-radius: 10px;
+  background-color: white;
+  height: 350px;
+  width: 350px;
+}
+
+.date p {
+  color: white;
+  text-align: center;
+}
+
+.value p {
+  text-align: center;
+  position: relative;
+  top: 40%;
+  -ms-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  color: white;
+  font-size: 35px;
+}
+
+.history {
+  margin-left: 50px;
+  margin-right: 50px;
+  position: relative;
+  border-radius: 10px;
+  background-color: white;
+  padding: 5px;
+  margin-left: 20px;
+  margin-top: 10px;
+  overflow: scroll;
+  height: 350px;
+}
+.history::-webkit-scrollbar {
+  display: none;
+}
+
+.history td,
+.history th {
+  padding: 25px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  text-align: center;
+  border-bottom: 1px solid;
+}
+.history th {
+  border: 1px solid;
+  background-color: rgba(102, 192, 210, 1);
+  color: white;
+  margin: 5px;
+  padding: 5px;
+}
+
+.diffDate {
+  position: absolute;
+  bottom: 5%;
+}
+.diffDate p {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px;
+}
+
+#whiteText {
+  color: white;
+}
+.pieChart {
+  position: absolute;
+  top: 35%;
+  right: 0%;
+  height: 300px;
+  width: 400px;
+  margin-left: -100px;
+}
+
+.lineCharts {
+  margin-top: 50px;
+}
+.charts {
+  width: 650px;
+  display: inline-flex;
+}
+
+.charts canvas {
+  background-color: white;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+@media screen and (max-width: 1320px) {
+  .charts {
+    width: 900px;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .charts {
+    width: 730px;
+  }
+  .dataDetails {
+    display: block;
+  }
+
+  .border,
+  .history {
+    margin: 20px;
+  }
+  .history {
+    height: 300px;
+  }
+}
+
+@media screen and (max-width: 770px) {
+  .charts {
+    width: 500px;
+  }
+  .charts canvas {
+    margin: 0px;
+    font-size: 10px;
+  }
+  .history {
+    font-size: 10px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .charts {
+    width: 350px;
+  }
+  .border {
+    margin: 5px;
+  }
+}

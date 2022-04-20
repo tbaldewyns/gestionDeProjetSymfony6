@@ -22,6 +22,12 @@ class DataFromSensor
     #[ORM\Column(type: 'datetime')]
     private $sendedAt;
 
+    #[ORM\ManyToOne(targetEntity: Local::class, inversedBy: 'dataFromSensors')]
+    private $local;
+
+    #[ORM\ManyToOne(targetEntity: DataType::class, inversedBy: 'dataFromSensors')]
+    private $type;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +65,30 @@ class DataFromSensor
     public function setSendedAt(\DateTimeInterface $sendedAt): self
     {
         $this->sendedAt = $sendedAt;
+
+        return $this;
+    }
+
+    public function getLocal(): ?Local
+    {
+        return $this->local;
+    }
+
+    public function setLocal(?Local $local): self
+    {
+        $this->local = $local;
+
+        return $this;
+    }
+
+    public function getType(): ?DataType
+    {
+        return $this->type;
+    }
+
+    public function setType(?DataType $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

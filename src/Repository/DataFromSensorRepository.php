@@ -2,11 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\DataSearch;
 use App\Entity\DataFromSensor;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method DataFromSensor|null find($id, $lockMode = null, $lockVersion = null)
@@ -73,4 +74,106 @@ class DataFromSensorRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findByLocal($local, $order)
+    {
+
+        return $this->createQueryBuilder('d')
+        ->addSelect('r') // to make Doctrine actually use the join
+            ->leftJoin('d.local', 'r')
+            ->andwhere('r.local = :localId')
+            ->setParameter('localId', $local)
+            ->orderBy('d.id', $order)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findDataByLocal($local)
+    {
+        return $this->createQueryBuilder('d')
+            ->Where('d.local = :val')
+            ->setParameter('val', $local)
+            ->orderBy('d.id', 'DESC')
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
+    public function findDataById($id)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.id = :val')
+            ->setParameter('val', $id)
+            ->orderBy('d.id', 'DESC')
+            ->getQuery()
+            ;
+    }
+
+    public function findDataByType($type)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.type = :val')
+            ->setParameter('val', $type)
+            ->orderBy('d.id', 'DESC')
+            ->getQuery()
+            ;
+    }
+
+    public function findDataBySearch(DataSearch $dataSearch)
+    {
+
+        $query =  $this->createQueryBuilder('d');
+        if($dataSearch->getType()){
+            $query = $query
+            ->addSelect('r') // to make Doctrine actually use the join
+            ->leftJoin('d.type', 'r')
+            ->andWhere('r.value = :type')
+            ->setParameter('type', $dataSearch->getType());
+        }
+        if($dataSearch->getLocal()){
+            $query = $query
+            ->andWhere('d.local = :local')
+            ->setParameter('local', $dataSearch->getLocal());
+        }
+        if($dataSearch->getFrequence()){
+            $query = $query
+            ->andWhere('d.sendedAt >= :date');
+            if($dataSearch->getFrequence() == "Week"){
+                $query = $query ->setParameter('date', new \DateTime('-7 days'));
+            }
+            else if($dataSearch->getFrequence() == "Month"){
+                $query = $query ->setParameter('date', new \DateTime('-1 month'));
+            }else if($dataSearch->getFrequence() == "Trismeste"){
+                $query = $query ->setParameter('date', new \DateTime('-3 months'));
+            }else{
+                $query = $query ->setParameter('date', new \DateTime('-1 year'));
+            }
+            
+        }
+            $query = $query ->orderBy('d.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+
+            return $query;
+    }
+
+    public function findLastDataByLocal($local): ?DataFromSensor
+    {
+        return $this->createQueryBuilder('e')
+            
+        ->addSelect('r') // to make Doctrine actually use the join
+            ->leftJoin('e.type', 'r')
+            ->where('r.value = :dataType')
+            ->setParameter('dataType', "CO2")
+            
+        ->addSelect('l') // to make Doctrine actually use the join
+            ->leftJoin('e.local', 'l')
+            ->andwhere('l.local = :localId')
+            ->setParameter('localId', $local)
+            
+            ->orderBy('e.sendedAt', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

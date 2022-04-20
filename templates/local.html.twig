@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/local.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <center>
+        <div class="colorBox">
+            <div class="localBorder">
+                {% if lastData.value < 600 %}
+                <div class="green">
+                {% elseif lastData.value < 900  %}
+                <div class="orange">
+                {% else %}
+                <div class="red">  
+                {% endif %}
+                    <div class="date">
+                        {{lastData.sendedAt |date('d-m-Y G:i')}}
+                    </div>
+                    <div class="value">
+                        {{lastData.value}} ppm
+                    </div>
+                    <div class="local">
+                        local {{lastData.local}}
+                    </div>
+                    {% if interval.i > 6 or interval.h >= 1 or interval.d >= 1 or interval.m >= 1 %}
+                        <div class="diffDate" id="whiteText">
+                        <p>La dernière mesure à été prise il y a :</p>
+                        <p>{{interval.m}} mois, {{interval.d}} jour(s), {{interval.h}} heure(s), {{interval.i}} minute(s), {{interval.s}} seconde(s) </p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </center>
+</div>
+{% endblock %}

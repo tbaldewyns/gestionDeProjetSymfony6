@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/admin/local.css') }}" rel="stylesheet" />
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+    <a href="{{path('stage2')}}">
+        <div class="linkToStage">
+            Stage 2
+        </div>
+    </a>
+    <center>
+        <div class="card">
+        <a href="{{ path('localDetails', {local: "1303"}) }}">
+            <div class="verticalLocal" id="local1303">
+                1303
+            </div>
+        </a>
+
+        <a href="{{ path('localDetails', {local: "1503"}) }}">
+            <div class="horizontalLocal" id="local1503">
+                1503
+            </div>
+        </a>
+        
+        <a href="{{ path('localDetails', {local: "1507"}) }}">
+            <div class="littleVerticalLocal" id="local1507">
+                1507
+            </div>
+        </a>
+
+        <a href="{{ path('localDetails', {local: "1508"}) }}">
+            <div class="littleVerticalLocal" id="local1508">
+                1508
+            </div>
+        </a>
+    </div>
+    </center>
+</div>
+{% endblock %}

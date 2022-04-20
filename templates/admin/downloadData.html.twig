@@ -1,0 +1,47 @@
+{% extends 'basePdf.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <center>
+        <div class="datas">
+            <h1>Tab of data</h1>
+            <hr>
+            <table>
+                <tr>
+                    <th>Valeur</th>
+                    <th>Type</th>
+                    <th>Local</th>
+                    <th>N°Capteur</th>
+                    <th>Date</th>
+                </tr>
+                {% if datas == null %}
+                    <tr>
+                        <td colspan="6">
+                            No data
+                        </td>
+                    </tr>
+                {% else %}
+                    {% for data in datas %}
+                    <tr>
+                        {% if data.type.value == "CO2" %}
+                        <td>{{data.value}} ppm</td>
+                        {% endif %}
+                        {% if data.type.value == "Humidity" %}
+                        <td>{{data.value * 100}} %</td>
+                        {% endif %}
+                        {% if data.type.value == "Temperature" %}
+                        <td>{{data.value}} °C</td>
+                        {% endif %}
+                        <td>{{data.type.value}}</td>
+                        <td>{{data.local}}</td>
+                        <td>{{data.sensorNbr}}</td>
+                        <td>{{data.sendedAt |date('d-m-Y G:i')}}</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}              
+            </table>
+        </div>
+    </center>
+</div>
+
+{% endblock %}

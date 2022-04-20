@@ -1,0 +1,61 @@
+.backBtn {
+  display: none;
+}
+table {
+  border-collapse: collapse;
+}
+
+.links {
+  margin-top: 10px;
+}
+.link {
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  opacity: 50%;
+  height: 300px;
+  width: 600px;
+  margin: 15px;
+  border-radius: 10px;
+}
+
+.link:hover {
+  opacity: 100%;
+  box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, 0.2);
+}
+
+.link p svg {
+  height: 100px;
+  color: rgba(102, 192, 210, 1);
+  text-align: center;
+  padding-top: 15%;
+}
+
+@media screen and (max-width: 1250px) {
+  .link {
+    height: 250px;
+    width: 500px;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .link {
+    height: 200px;
+    width: 400px;
+  }
+  .link p svg {
+    height: 80px;
+  }
+}
+
+@media screen and (max-width: 880px) {
+  .link {
+    height: 175px;
+    width: 350px;
+  }
+  .link p svg {
+    height: 60px;
+    padding-top: 10%;
+  }
+}

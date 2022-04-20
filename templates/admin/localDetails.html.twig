@@ -1,0 +1,193 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/local.css') }}" rel="stylesheet" />
+<link href="{{ asset('css/admin/localDetails.css') }}" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+    <center>
+        <div class="dataDetails">
+            <div class="localBorder">
+                {% if lastData.value < 600 %} 
+                    <div class="green">
+                {% elseif lastData.value < 900 %} 
+                    <div class="orange">
+                {% else %}
+                    <div class="red">
+                            {% endif %}
+                            <div class="date">
+                                {{lastData.sendedAt |date('d-m-Y G:i')}}
+                            </div>
+                            <div class="value">
+                                {{lastData.value}} ppm 
+                            </div>
+                            {% if interval.i >= 5 or interval.h > 0 or interval.d > 0 or interval.m > 0 %}
+                            <div class="diffDate" id="whiteText">
+                                <p>La dernière mesure à été prise il y a :</p>
+                                <p>{{interval.m}} mois, {{interval.d}} jour(s), {{interval.h}} heure(s), {{interval.i}} minute(s), {{interval.s}}
+                                    seconde(s) </p>
+                            </div>
+                            {% endif %}
+                    </div>
+            </div>
+        
+            <div class="history">
+                <table>
+                    <tr>
+                        <th>Mesure</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                    </tr>
+                    {% for data in datas %}
+                    <tr>
+                        {% if data.type == "CO2" %}
+                        <td>{{data.value}} ppm</td>
+                        {% endif %}
+                        {% if data.type == "Humidity" %}
+                        <td>{{data.value * 100}} %</td>
+                        {% endif %}
+                        {% if data.type == "Temperature" %}
+                        <td>{{data.value}} °C</td>
+                        {% endif %}
+                        <td>{{data.type}}</td>
+                        <td>{{data.sendedAt |date('d-m-Y G:i')}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="lineCharts">
+            {% if co2DataValue|length > 2%}
+            <div class="charts">
+                <canvas id="pieChart"></canvas>
+            </div>
+            <div class="charts">
+                <canvas id="co2Chart"></canvas>
+            </div>
+            {% endif %}
+            {% if humidityDataValue|length > 2%}
+            <div class="charts">
+                <canvas id="humidityChart"></canvas>
+            </div>
+            {% endif %}
+            {% if temperatureDataValue|length > 2%}
+            <div class="charts">
+                <canvas id="temperatureChart"></canvas>
+            </div>
+            {% endif %}
+        </div>
+    </center>
+
+</div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+<script>
+    let co2Categories = document.querySelector("#co2Chart")
+    let co2categGraph = new Chart(co2Categories, {
+        type: "line",
+        data: {
+            labels: {{ co2Date|raw }},
+            datasets: [{
+                label: "C0²",
+                data: {{ co2DataValue|raw }},
+                backgroundColor: "rgba(102, 192, 210, 1)"
+            }]
+        },
+        options: {
+            maintainAspectRatio: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 3000                          
+                    }                  
+                    
+                }]
+            }
+        }
+    })
+</script>
+
+<script>
+    let humiditycategories = document.querySelector("#humidityChart")
+    let humiditycategGraph = new Chart(humiditycategories, {
+        type: "line",
+        data: {
+            labels: {{ humidityDate|raw }},
+            datasets: [{
+                label: "Humidity",
+                data: {{ humidityDataValue|raw }},
+                backgroundColor: "rgba(102, 192, 210, 1)"
+            }]
+        },
+        options: {
+            maintainAspectRatio: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 1                          
+                    }                  
+                    
+                }]
+            }
+        }
+    })
+</script>
+
+<script>
+    let temperatureCategories = document.querySelector("#temperatureChart")
+    let temperatureCategGraph = new Chart(temperatureCategories, {
+        type: "line",
+        data: {
+            labels: {{ temperatureDate|raw }},
+            datasets: [{
+                label: "Temperature",
+                data: {{ temperatureDataValue|raw }},
+                backgroundColor: "rgba(102, 192, 210, 1)"
+            }]
+        },
+        options: {
+            maintainAspectRatio: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        min: -20,
+                        max: 50                          
+                    }                  
+                    
+                }]
+            }
+        }
+    })
+</script>
+
+<script>
+    let pieCategories = document.querySelector("#pieChart")
+    let pieCategGraph = new Chart(pieCategories, {
+        type: "doughnut",
+        data: {
+            labels: ["<600", ">600 & < 900", ">900"],
+            datasets: [{
+                data:[{{goodCo2Counter}}, {{midCo2Counter}}, {{badCo2Counter}}],
+                backgroundColor: ["green", "orange", "red"] 
+            }]
+        },
+            options: {
+                maintainAspectRatio: true,
+                
+        }
+    })
+</script>
+{% endblock %}
