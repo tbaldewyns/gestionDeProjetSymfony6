@@ -106,7 +106,6 @@ class AdminController extends AbstractController
     public function localDetails(String $local, DataFromSensorRepository $dataFromSensorRepo): Response
     {
         $dataASC = $dataFromSensorRepo->findByLocal($local, "ASC");
-        //dd($dataASC);
         $dataFromDB = $dataFromSensorRepo->findByLocal($local, "DESC");
         $lastData = $dataFromSensorRepo->findLastDataByLocal($local);
         
