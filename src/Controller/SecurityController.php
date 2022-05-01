@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -103,6 +104,18 @@ class SecurityController extends AbstractController
 
         return $this->render('/security/userprofile.html.twig', [
             'user' => $user
+        ]);
+    }
+    #[Route('/api/login', name: 'api_login')]
+    public function apiLogin(#[CurrentUser] ?User $user): Response
+    {
+        return $this->json([
+            'id' => $user->getId(),
+            'accountType' => $user->getAccountType(),
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
+            'email' => $user->getEmail(),
+            'password' => $user->getPassword(),
         ]);
     }
 }

@@ -2,12 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\LocalRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\LocalRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: LocalRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:dataFromSensor']]
+)]
 class Local
 {
     #[ORM\Id]

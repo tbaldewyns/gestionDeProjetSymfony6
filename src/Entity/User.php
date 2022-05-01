@@ -5,11 +5,40 @@ namespace App\Entity;
 use Serializable;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[ApiResource(
+    collectionOperations: [
+        'me' => [
+            'pagination_enabled' => false,
+            'path' => '/me',
+            'method' => 'get',
+            'controller' => MeController::class,
+            'read' => false,
+            'openapi_context' => [
+                'security' => ['cookieAuth' => []]
+            ]
+        ],
+        'post' => [
+            'path' => '/users',
+        ]
+    ],
+    itemOperations: [
+        'get' => [
+            'controller' => NotFoundAction::class,
+            'read' => false,
+            'output' => false
+        ]
+    ],
+    normalizationContext: ['groups' => ['read:User'], ['read:Child']]
+
+
+)]
 class User implements UserInterface , \Serializable, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
