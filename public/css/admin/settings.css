@@ -1,0 +1,55 @@
+.container{
+  margin-top: 30px;  
+}
+.setting{
+    height: 400px;
+    width: 600px;
+    background-color: white;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 10px;
+    border-radius: 10px;
+}
+table th, table td{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+table th{
+    background-color: rgba(102, 192, 210, 1);
+    color: white;
+    padding: 5px;
+}
+.editSvg{
+    color: darkcyan;
+}
+.deleteSvg{
+    color: red;
+}
+.input{
+    display: inline-block;
+}
+input{
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+}
+input:focus{
+    outline: none;
+}
+button{
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    height: 40px;
+    width: 100px;
+    background: rgba(102, 192, 210, 1);
+    border-radius: 10px;
+    border: none;
+    margin-top: 10px;
+}
+
+button:hover{
+    opacity: 50%;
+    transition: 1s;
+}

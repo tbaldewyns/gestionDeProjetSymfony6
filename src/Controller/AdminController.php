@@ -4,9 +4,15 @@ namespace App\Controller;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use App\Entity\Local;
 use App\Entity\DataSearch;
+use App\Form\AddLocalType;
 use App\Form\DataSearchType;
+use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\DataFromSensorRepository;
+use App\Repository\DataTypeRepository;
+use App\Repository\LocalRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -223,5 +229,32 @@ class AdminController extends AbstractController
         ]);
 
         return new Response();
+    }
+
+    #[Route('/admin/settings', name: 'settings')]
+    public function settings(Request $request, ManagerRegistry $manager, UserRepository $userRepo, LocalRepository $localRepo, DataTypeRepository $datatypeRepo): Response
+    {
+        $dataTypeList = $datatypeRepo->findAll();
+        $localList = $localRepo->findLocalByCampus("HELB");
+        $userList = $userRepo->findAllByDesc();
+        $local = new Local();
+        
+        $localForm = $this->createForm(AddLocalType::class, $local);
+
+        $localForm->handleRequest($request);
+        if ($localForm->isSubmitted() && $localForm->isValid()) {
+            
+            $manager->getManager()->persist($local);
+            $manager->getManager()->flush();
+
+            $this->addFlash("success", "Le local à bien été créé");
+            return $this->redirectToRoute('settings');
+        }
+        return $this->render('admin/settings.html.twig', [
+            "addLocalForm" => $localForm->createView(),
+            "userList" => $userList,
+            "localList" => $localList,
+            "dataTypeList" =>$dataTypeList
+        ]);
     }
 }

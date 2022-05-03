@@ -73,4 +73,15 @@ class LocalRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findLocalByCampus($campus)
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.campus = :val')
+            ->setParameter('val', $campus)
+            ->orderBy('l.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

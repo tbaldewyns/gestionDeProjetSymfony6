@@ -1,5 +1,14 @@
+.localNbr{
+    width: 70%;
+    border-radius: 10px;
+    background-color: white;
+    margin-top: 20px;
+}
+.localNbr p{
+    font-size: 40px;
+    color: rgba(102, 192, 210, 1);
+}
 .dataDetails {
-  margin-top: 20px;
   display: inline-flex;
 }
 .border {
@@ -29,8 +38,6 @@
 }
 
 .history {
-  margin-left: 50px;
-  margin-right: 50px;
   position: relative;
   border-radius: 10px;
   background-color: white;

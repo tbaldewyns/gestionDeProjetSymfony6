@@ -120,18 +120,19 @@ class DataFromSensorRepository extends ServiceEntityRepository
 
     public function findDataBySearch(DataSearch $dataSearch)
     {
-
         $query =  $this->createQueryBuilder('d');
         if($dataSearch->getType()){
             $query = $query
-            ->addSelect('r') // to make Doctrine actually use the join
-            ->leftJoin('d.type', 'r')
-            ->andWhere('r.value = :type')
+            ->addSelect('t') // to make Doctrine actually use the join
+            ->leftJoin('d.type', 't')
+            ->andWhere('t.value = :type')
             ->setParameter('type', $dataSearch->getType());
         }
         if($dataSearch->getLocal()){
             $query = $query
-            ->andWhere('d.local = :local')
+            ->addSelect('l') // to make Doctrine actually use the join
+            ->leftJoin('d.local', 'l')
+            ->andWhere('l.local = :local')
             ->setParameter('local', $dataSearch->getLocal());
         }
         if($dataSearch->getFrequence()){
