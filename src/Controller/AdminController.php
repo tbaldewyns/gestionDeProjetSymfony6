@@ -238,6 +238,7 @@ class AdminController extends AbstractController
         $localList = $localRepo->findLocalByCampus("HELB");
         $userList = $userRepo->findAllByDesc();
         $local = new Local();
+        $local2 = new Local();
         
         $localForm = $this->createForm(AddLocalType::class, $local);
 
