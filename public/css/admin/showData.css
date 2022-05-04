@@ -45,12 +45,15 @@ select {
 }
 
 .datas {
-  margin: 10px;
   border-radius: 10px;
   background-color: white;
   padding: 30px;
   overflow: scroll;
   height: 400px;
+}
+.dataTitle p{
+margin: -5px;
+font-weight: bold;
 }
 .datas hr {
   width: 500px;
