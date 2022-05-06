@@ -9,7 +9,21 @@
     vertical-align: middle;
     margin: 10px;
     border-radius: 10px;
+    position: relative;
 }
+.setting h1{
+    color: rgba(102, 192, 210, 1);
+}
+.dataTable{
+    height: 250px;
+    width: 600px;
+    overflow: scroll;
+}
+#localTable table th{
+    width: 110px;
+
+}
+
 table th, table td{
     padding-left: 20px;
     padding-right: 20px;
@@ -26,10 +40,19 @@ table th{
 .deleteSvg{
     color: red;
 }
+.form{
+    position: absolute;
+    bottom: 5%;
+    left:0;
+    right:0;
+    margin-left:auto;
+    margin-right:auto;
+}
 .input{
     display: inline-block;
 }
 input{
+    width: 120px;
     height: 40px;
     border-radius: 10px;
     border: none;

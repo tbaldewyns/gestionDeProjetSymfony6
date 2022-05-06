@@ -25,6 +25,12 @@ class DataType
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: DataFromSensor::class)]
     private $dataFromSensors;
 
+    #[ORM\Column(type: 'float', nullable: true)]
+    private $minAlarm;
+
+    #[ORM\Column(type: 'float', nullable: true)]
+    private $maxAlarm;
+
     public function __construct()
     {
         $this->dataFromSensors = new ArrayCollection();
@@ -80,5 +86,29 @@ class DataType
     public function __toString() : string
     {
         return $this->value;
+    }
+
+    public function getMinAlarm(): ?float
+    {
+        return $this->minAlarm;
+    }
+
+    public function setMinAlarm(?float $minAlarm): self
+    {
+        $this->minAlarm = $minAlarm;
+
+        return $this;
+    }
+
+    public function getMaxAlarm(): ?float
+    {
+        return $this->maxAlarm;
+    }
+
+    public function setMaxAlarm(?float $maxAlarm): self
+    {
+        $this->maxAlarm = $maxAlarm;
+
+        return $this;
     }
 }

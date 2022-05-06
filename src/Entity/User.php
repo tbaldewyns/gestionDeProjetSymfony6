@@ -5,12 +5,20 @@ namespace App\Entity;
 use Serializable;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
-use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+/**
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     message="L'adresse email correspond à un compte existant."
+ * )
+ */
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
     collectionOperations: [
@@ -46,9 +54,24 @@ class User implements UserInterface , \Serializable, PasswordAuthenticatedUserIn
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    /**
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 20,
+     *      minMessage = "Votre prénom doit faire au moins {{ limit }} cacractères",
+     *      maxMessage = "Votre prénom ne peut pas faire plus de {{ limit }} cacractères"
+     * )
+     */
     #[ORM\Column(type: 'string', length: 255)]
     private $firstname;
-
+    /**
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 20,
+     *      minMessage = "Votre nom doit faire au moins {{ limit }} cacractères",
+     *      maxMessage = "Votre nom ne peut pas faire plus de {{ limit }} cacractères"
+     * )
+     */
     #[ORM\Column(type: 'string', length: 255)]
     private $lastname;
 
@@ -57,10 +80,14 @@ class User implements UserInterface , \Serializable, PasswordAuthenticatedUserIn
 
     #[ORM\Column(type: 'string', length: 255)]
     private $accountType;
-
+    /**
+     * @Assert\Length(min="6", minMessage="Votre mot de passe doit faire minimum 6 caracteres")
+     */
     #[ORM\Column(type: 'string', length: 255)]
     private $password;
-
+    /**
+     * @Assert\EqualTo(propertyPath="password", message="Les mots de passes ne correspondent pas !")
+     */
     public $confirmPassword;
 
     public function getId(): ?int

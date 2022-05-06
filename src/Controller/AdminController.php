@@ -5,14 +5,16 @@ namespace App\Controller;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use App\Entity\Local;
+use App\Entity\DataType;
 use App\Entity\DataSearch;
 use App\Form\AddLocalType;
 use App\Form\DataSearchType;
+use App\Form\AddDataTypeType;
+use App\Repository\UserRepository;
+use App\Repository\LocalRepository;
+use App\Repository\DataTypeRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\DataFromSensorRepository;
-use App\Repository\DataTypeRepository;
-use App\Repository\LocalRepository;
-use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -237,6 +239,7 @@ class AdminController extends AbstractController
         $dataTypeList = $datatypeRepo->findAll();
         $localList = $localRepo->findLocalByCampus("HELB");
         $userList = $userRepo->findAllByDesc();
+        
         $local = new Local();
         
         $localForm = $this->createForm(AddLocalType::class, $local);
@@ -250,8 +253,23 @@ class AdminController extends AbstractController
             $this->addFlash("success", "Le local à bien été créé");
             return $this->redirectToRoute('settings');
         }
+
+        $dataType = new DataType();
+        
+        $dataTypeForm = $this->createForm(AddDataTypeType::class, $dataType);
+
+        $dataTypeForm->handleRequest($request);
+        if ($dataTypeForm->isSubmitted() && $dataTypeForm->isValid()) {
+            
+            $manager->getManager()->persist($dataType);
+            $manager->getManager()->flush();
+
+            $this->addFlash("success", "Le type à bien été créé");
+            return $this->redirectToRoute('settings');
+        }
         return $this->render('admin/settings.html.twig', [
             "addLocalForm" => $localForm->createView(),
+            "addDataTypeForm" => $dataTypeForm->createView(),
             "userList" => $userList,
             "localList" => $localList,
             "dataTypeList" =>$dataTypeList

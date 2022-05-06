@@ -10,11 +10,6 @@
     border-radius: 10px;
     padding: 10px;
 }
-.backBtn {
-  position: absolute;
-  top: 7%;
-  left: 15%;
-}
 .backBtn a svg {
   color: white;
   font-weight: bold;
@@ -34,14 +29,20 @@ body {
     yellow 100%
   );
 }
-
 .container {
   min-height: 100vh;
+}
+header div{
+    margin-left: 30px;
+    margin-right: 30px;
 }
 .logo img {
   height: 50px;
 }
-
+.settingLogo svg{
+    width: 30px;
+    color: white;
+}
 a {
   text-decoration: none;
 }

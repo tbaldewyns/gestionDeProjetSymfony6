@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\LocalRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: LocalRepository::class)]
@@ -18,10 +19,24 @@ class Local
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
-
+    /**
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 20,
+     *      minMessage = "Le local doit faire au moins {{ limit }} cacractères",
+     *      maxMessage = "Le local ne peut pas faire plus de {{ limit }} cacractères"
+     * )
+     */
     #[ORM\Column(type: 'string', length: 255)]
     private $local;
-
+    /**
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 20,
+     *      minMessage = "Le cammpus doit faire au moins {{ limit }} cacractères",
+     *      maxMessage = "Le cammpus ne peut pas faire plus de {{ limit }} cacractères"
+     * )
+     */
     #[ORM\Column(type: 'string', length: 255)]
     private $campus;
 

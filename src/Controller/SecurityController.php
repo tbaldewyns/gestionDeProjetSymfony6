@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationType;
+use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,8 +49,25 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/login', name: 'login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(Request $request, ManagerRegistry $manager,AuthenticationUtils $authenticationUtils, UserRepository $userRepo, UserPasswordHasherInterface $passwordHasher): Response
     {
+
+        $userList = $userRepo->findAll();
+
+        if($userList == null){
+            $user = new User();
+            $user->setFirstname("Tanguy");
+            $user->setLastname("Baldewyns");  
+            $user->setEmail("tanguy.baldewyns@gmail.com");
+            $hashedPassword = $passwordHasher->hashPassword($user,"aaaaaa");
+            $user->setPassword($hashedPassword);
+
+            $user->setAccountType("ROLE_SUPERADMIN");
+            $manager->getManager()->persist($user);
+            //Envoie des données vers la base de données
+            $manager->getManager()->flush(); 
+        }
+        
         if ($this->getUser() != null){
             return $this->redirectToRoute('userprofile', [
             'id' => $this->getUser()->getUserIdentifier()
