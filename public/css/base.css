@@ -43,6 +43,14 @@ header div{
     width: 30px;
     color: white;
 }
+<<<<<<< HEAD
+=======
+
+header table td{
+    padding-left: 150px;
+    padding-right: 150px;
+}
+>>>>>>> 40d33d86df6ba2fac847e69bdf557cbba721740a
 a {
   text-decoration: none;
 }
