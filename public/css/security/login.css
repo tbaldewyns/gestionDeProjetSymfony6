@@ -4,15 +4,19 @@
     39deg,
     lightgrey 0%,
     rgba(102, 192, 210, 1) 46%,
-    rgba(88, 177, 205, 1) 68%,
-    yellow 100%
+    rgba(88, 177, 205, 1) 68%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   padding: 30px;
 }
+
+#editUserForm{
+    font-size: 40px;
+}
 .loginCard,
-.registerCard {
+.registerCard, 
+.editCard {
   margin-top: 10px;
   background-color: white;
   border-radius: 10px;
@@ -26,6 +30,11 @@
 .registerCard {
   max-width: 500px;
   height: 520px;
+}
+
+.editCard{
+    width: 500px;
+    padding-bottom: 50px;
 }
 
 .loginCard svg {

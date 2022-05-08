@@ -1,15 +1,15 @@
-.message p,
-.message a {
+.noDataMessage p,
+.noDataMessage a {
   margin-top: 50px;
   color: white;
   font-size: 30px;
 }
 
-.message a {
+.noDataMessage a {
   text-decoration: underline;
 }
 
-.message a:hover {
+.noDataMessage a:hover {
   text-decoration: none;
   opacity: 50%;
   transition: 0.5s;

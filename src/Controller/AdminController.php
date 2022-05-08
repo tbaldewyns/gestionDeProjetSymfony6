@@ -40,8 +40,8 @@ class AdminController extends AbstractController
         $datas = $dataFromSensorRepo->findDataBySearch($search);
         
         if ($datas == null){
-            $this->redirectToRoute("noData", [
-            'local' => "HELB"
+            return $this->redirectToRoute("noData", [
+            'local' => $search->getLocal()
         ]);
         }
         $co2DataValue = [];
@@ -178,14 +178,6 @@ class AdminController extends AbstractController
             'midCo2Counter' => json_encode($midCo2Counter),
             'badCo2Counter' => json_encode($badCo2Counter),
 
-        ]);
-    }
-
-    #[Route('/admin/noData/{local}', name: 'noData')]
-    public function noData(String $local): Response
-    {
-        return $this->render('admin/noData.html.twig', [
-            'local' => $local
         ]);
     }
 

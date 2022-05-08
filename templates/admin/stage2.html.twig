@@ -8,20 +8,21 @@
 {% block body %}
 
 <div class="container">
-    <a href="{{path('stage1')}}">
-        <div class="linkToStage">
-        Stage 1
-    </div>
-    </a>
+    
     <div class="card">
+        <a href="{{path('stage1')}}">
+            <div class="linkToStage">
+                Étage 1
+            </div>
+        </a>
         <a href="{{ path('localDetails', {local: "2106"}) }}">
             <div class="horizontalLocal" id="local2106">
-                2106
+                <p>2106</p>
             </div>
         </a>
         <a href="{{ path('localDetails', {local: "2503"}) }}">
             <div class="verticalLocal" id="local2503">
-                2503
+                <p>2503</p>
             </div>
         </a>
     </div>

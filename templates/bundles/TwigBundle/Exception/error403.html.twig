@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+        <link href="{{ asset('css/error/error.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <center>
+        <div class="title">
+        <p>Erreur 403</p>
+        </div>
+        <div class="subTitle">
+            Accès interdit 
+        </div>
+        <div class="toHome">
+            <p>Vous n'avez pas accès à cette page, veuillez retourner au </p>
+            <a href="{{ path('index') }}"> menu principal</a>
+        </div>
+    </center>
+</div>
+{% endblock %}

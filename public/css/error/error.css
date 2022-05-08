@@ -1,0 +1,23 @@
+.title{
+    color: white;
+    font-size: 40px;
+    margin: 20px;
+    font-weight: bold;
+}
+.subTitle{
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.toHome{
+    color: white;
+}
+
+.toHome a{
+    color: white;
+}
+
+.toHome a:hover{
+    opacity: 50%;
+}

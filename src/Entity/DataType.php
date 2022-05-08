@@ -20,6 +20,7 @@ class DataType
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    
     private $value;
 
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: DataFromSensor::class)]

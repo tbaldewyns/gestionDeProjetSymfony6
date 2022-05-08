@@ -21,6 +21,11 @@ class Controller extends AbstractController
     {
 
         $lastData = $dataFromSensorRepository->findLastDataByLocal($local);
+        if($lastData == null){
+            return $this->redirectToRoute("noData", [
+            'local' => $local
+        ]);
+        }
         $currentData = new \DateTime("now");
         $dateLastData = $lastData->getSendedAt();
         $interval = $currentData->diff($dateLastData);
@@ -36,6 +41,14 @@ class Controller extends AbstractController
     public function about(): Response
     {
         return $this->render('/about.html.twig', [
+        ]);
+    }
+
+     #[Route('/noData/{local}', name: 'noData')]
+    public function noData(String $local): Response
+    {
+        return $this->render('admin/noData.html.twig', [
+            'local' => $local
         ]);
     }
 }

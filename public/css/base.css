@@ -1,14 +1,28 @@
 * {
   font-family: "Times New Roman", Times, serif;
 }
+.loader{
+    height: 700px;
+    width: 700px;
+    background-color: red;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
-.dangerMessage{
+.dangerMessage, .message{
     width: 80%;
     color: white;
     font-weight: bold;
-    background-color: lightcoral;
     border-radius: 10px;
     padding: 10px;
+}
+.dangerMessage{
+    background-color: lightcoral;
+}
+
+.message {
+    background-color: green;
 }
 .backBtn a svg {
   color: white;
@@ -43,14 +57,7 @@ header div{
     width: 30px;
     color: white;
 }
-<<<<<<< HEAD
-=======
 
-header table td{
-    padding-left: 150px;
-    padding-right: 150px;
-}
->>>>>>> 40d33d86df6ba2fac847e69bdf557cbba721740a
 a {
   text-decoration: none;
 }
@@ -65,7 +72,7 @@ a {
   position: fixed;
   height: 400px;
   width: 600px;
-  opacity: 10%;
+  opacity: 15%;
   z-index: -1;
   transform: rotate(45deg);
   background-color: white;

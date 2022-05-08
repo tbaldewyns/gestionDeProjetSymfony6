@@ -18,7 +18,15 @@
     height: 250px;
     width: 600px;
     overflow: scroll;
+    -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
 }
+
+.dataTable::-webkit-scrollbar-corner {
+    display: none;
+}
+
 #localTable table th{
     width: 110px;
 
