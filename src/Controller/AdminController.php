@@ -22,6 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminController extends AbstractController
 {
+    
     #[Route('/admin', name: 'admin')]
     public function admin(): Response
     {
@@ -37,8 +38,19 @@ class AdminController extends AbstractController
 
         $searchForm->handleRequest($request);
 
-        $datas = $dataFromSensorRepo->findDataBySearch($search);
+        $total = $dataFromSensorRepo->findCountOfData();
         
+        $limit = 50;
+
+        $page = (int) $request->query->get("page", 1);
+        
+        $datas = $dataFromSensorRepo->findDataBySearchPaginated($search, $page, $limit);
+        
+        if($request->get('ajax')){
+            return "OK";
+        }
+
+
         if ($datas == null){
             return $this->redirectToRoute("noData", [
             'local' => $search->getLocal()
@@ -84,6 +96,8 @@ class AdminController extends AbstractController
         }
         return $this->render('admin/showData.html.twig', [
             'datas' => $datas,
+            'total' => $total,
+            'limit' => $limit,
             'co2DataValue' => json_encode($co2DataValue),
             'humidityDataValue' => json_encode($humidityDataValue),
             'temperatureDataValue' => json_encode($temperatureDataValue),
@@ -111,12 +125,19 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/localDetails/{local}', name: 'localDetails')]
-    public function localDetails(String $local, DataFromSensorRepository $dataFromSensorRepo): Response
+    public function localDetails(String $local, DataFromSensorRepository $dataFromSensorRepo, Request $request): Response
     {
-        $dataASC = $dataFromSensorRepo->findByLocal($local, "ASC");
-        $dataFromDB = $dataFromSensorRepo->findByLocal($local, "DESC");
-        $lastData = $dataFromSensorRepo->findLastDataByLocal($local);
+        $total = $dataFromSensorRepo->findCountOfData();
         
+        $limit = 50;
+
+        $page = (int) $request->query->get("page", 1);
+        //$dataASC = $dataFromSensorRepo->findByLocal($local, "ASC");
+        $dataASC =  $dataFromSensorRepo->findAllPaginatedASC($page, $limit);
+        //$dataFromDB = $dataFromSensorRepo->findByLocal($local, "DESC");
+        $dataFromDB = $dataFromSensorRepo->findAllPaginatedDESC($page, $limit);
+        $lastData = $dataFromSensorRepo->findLastDataByLocal($local);
+        //dd($total);
         if ($dataASC == null || $dataFromDB == null || $lastData == null){
             return $this->redirectToRoute("noData", [
             'local' => $local
@@ -167,6 +188,8 @@ class AdminController extends AbstractController
             'datas' => $dataFromDB,
             'lastData' => $lastData,
             'interval' => $interval,
+            'total' => $total,
+            'limit' => $limit,
             'co2DataValue' => json_encode($co2DataValue),
             'humidityDataValue' => json_encode($humidityDataValue),
             'temperatureDataValue' => json_encode($temperatureDataValue),

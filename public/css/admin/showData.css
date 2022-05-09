@@ -49,7 +49,8 @@ select {
   background-color: white;
   padding: 30px;
   overflow: scroll;
-  height: 400px;
+  max-height: 400px;
+  width: fit-content;
 }
 .dataTitle p{
 margin: -5px;
