@@ -46,16 +46,17 @@ table {
   }
   .link p svg {
     height: 80px;
+    padding-top: 11%;
   }
 }
 
 @media screen and (max-width: 880px) {
   .link {
-    height: 175px;
-    width: 350px;
+    height: 160px;
+    width: 320px;
   }
   .link p svg {
     height: 60px;
-    padding-top: 10%;
+    padding-top: 12%;
   }
 }

@@ -12,15 +12,20 @@
                 {{ danger }}
             </div>
         {% endfor %}
+        {% for message in app.flashes("success") %}
+            <div class="message">
+                {{ message }}
+            </div>
+        {% endfor %}
         <div class="settings">
-            {% if is_granted('ROLE_SUPERADMIN') %}
+            <!--{% if is_granted('ROLE_SUPERADMIN') %}
             <div class="setting">
                 <div class="addCampus">
                     <h1>Gérer les campus</h1>
                     <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
                         Facilis accusantium voluptas voluptates, itaque neque possimus.</p>
                 </div> 
-            </div>
+            </div>-->
             {% endif %}
             <div class="setting">
                 <div class="addLocal">
@@ -75,11 +80,10 @@
                 </div>
             </div>
             <div class="setting">
-                <div class="manageAccount">
+                <div class="dataTable" id="manageAccount">
                     <h1>Gérer les comptes utilisateurs</h1>
                     <table>
                         <tr>
-                            <th>ID</th>
                             <th>Prénom</th>
                             <th>Nom</th>
                             <th>Type</th>
@@ -88,7 +92,6 @@
                         </tr>
                         {% for user in userList %}
                         <tr>
-                            <td>{{user.id}}</td>
                             <td>{{user.firstname}}</td>
                             <td>{{user.lastname}}</td>
                             <td>{{user.accountType}}</td>

@@ -9,17 +9,22 @@
 
 
 {% block body %}
+
 <div class="container">
     <center>
         <div class="localNbr">
-            <p>Local {{lastData.local}}</p>
+            {% for local in locals %}
+                <a href="{{path ('localDetails', {local: local.local})}}">{{local}}</a>
+            {% endfor %}
         </div>
+        {% if total > limit * 2 %}
         <div class="pagination">
             {% for page in 1..((total / limit) | round(0, 'ceil')) %}
                 <a href="?page={{ page }}">{{page}}</a>
             {% endfor %}
-        </div>
+        </div>{% endif %}
         <div class="dataDetails">
+            {% if co2DataValue|length > 2%}
             <div class="localBorder">
                 {% if lastData.value < 600 %} 
                     <div class="green">
@@ -33,6 +38,9 @@
                             </div>
                             <div class="value">
                                 {{lastData.value}} ppm 
+                            </div>
+                            <div class="local">
+                                local {{lastData.local}}
                             </div>
                             {% if interval.i >= 5 or interval.h > 0 or interval.d > 0 or interval.m > 0 %}
                             <div class="diffDate" id="whiteText">
@@ -53,7 +61,7 @@
                             {% endif %}
                     </div>
             </div>
-        
+            {% endif %}
             <div class="history">
                 <table>
                     <tr>
@@ -107,6 +115,7 @@
 
 
 {% block javascripts %}
+
 <script>
     let co2Categories = document.querySelector("#co2Chart")
     let co2categGraph = new Chart(co2Categories, {
@@ -196,7 +205,7 @@
     let pieCategGraph = new Chart(pieCategories, {
         type: "doughnut",
         data: {
-            labels: ["<600", ">600 & < 900", ">900"],
+            labels: [{{(goodCo2Counter / datas|length) * 100}} + "% <600" ,{{(midCo2Counter / limit) * 100}} + "% >600 & < 900", {{(badCo2Counter / limit) * 100}} +"% >900"],
             datasets: [{
                 data:[{{goodCo2Counter}}, {{midCo2Counter}}, {{badCo2Counter}}],
                 backgroundColor: ["green", "orange", "red"] 

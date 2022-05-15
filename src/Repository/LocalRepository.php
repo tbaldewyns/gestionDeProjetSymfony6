@@ -84,4 +84,16 @@ class LocalRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findLastLocalByCampus($campus): ?Local
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.campus = :val')
+            ->setParameter('val', $campus)
+            ->orderBy('l.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

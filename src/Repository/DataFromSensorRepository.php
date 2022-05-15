@@ -78,7 +78,7 @@ class DataFromSensorRepository extends ServiceEntityRepository
     {
 
         return $this->createQueryBuilder('d')
-        ->addSelect('r') // to make Doctrine actually use the join
+            ->addSelect('r') // to make Doctrine actually use the join
             ->leftJoin('d.local', 'r')
             ->andwhere('r.local = :localId')
             ->setParameter('localId', $local)
@@ -159,7 +159,7 @@ class DataFromSensorRepository extends ServiceEntityRepository
             return $query;
     }
     
-    public function findDataBySearchPaginated(DataSearch $dataSearch, $page, $limit)
+    public function findDataBySearchPaginated($dataSearch, $page, $limit)
     {
         $query =  $this->createQueryBuilder('d');
         if($dataSearch->getType()){
@@ -233,9 +233,13 @@ class DataFromSensorRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findAllPaginatedDESC($page, $limit)
+    public function findDataByLocalPaginatedDESC($page, $limit, $local)
     {
         return $this->createQueryBuilder('d')
+            ->addSelect('r') // to make Doctrine actually use the join
+            ->leftJoin('d.local', 'r')
+            ->andwhere('r.local = :localId')
+            ->setParameter('localId', $local)
             ->orderBy('d.id', 'DESC')
             ->setFirstResult(($page * $limit) - $limit)
             ->setMaxResults($limit)
@@ -251,6 +255,61 @@ class DataFromSensorRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult()
             ;
+    }
+
+    public function findCountOfDataByLocal($local)
+    {
+        return $this->createQueryBuilder('d')
+            ->addSelect('l') // to make Doctrine actually use the join
+            ->leftJoin('d.local', 'l')
+            ->andwhere('l.local = :localId')
+            ->setParameter('localId', $local)
+            ->select('Count(d)')
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
+    public function findPaginatedCount(DataSearch $dataSearch)
+    {
+        $query =  $this->createQueryBuilder('d');
+        if($dataSearch->getType()){
+            $query = $query
+            ->addSelect('t') // to make Doctrine actually use the join
+            ->leftJoin('d.type', 't')
+            ->andWhere('t.value = :type')
+            ->setParameter('type', $dataSearch->getType());
+        }
+        if($dataSearch->getLocal()){
+            $query = $query
+            ->addSelect('l') // to make Doctrine actually use the join
+            ->leftJoin('d.local', 'l')
+            ->andWhere('l.local = :local')
+            ->setParameter('local', $dataSearch->getLocal());
+        }
+        if($dataSearch->getFrequence()){
+            $query = $query
+            ->andWhere('d.sendedAt >= :date');
+            if($dataSearch->getFrequence() == "Week"){
+                $query = $query ->setParameter('date', new \DateTime('-7 days'));
+            }
+            else if($dataSearch->getFrequence() == "Month"){
+                $query = $query ->setParameter('date', new \DateTime('-1 month'));
+            }else if($dataSearch->getFrequence() == "Trismeste"){
+                $query = $query ->setParameter('date', new \DateTime('-3 months'));
+            }else{
+                $query = $query ->setParameter('date', new \DateTime('-1 year'));
+            }
+            
+        }
+            $query = $query
+            ->select('Count(d)')
+            ->orderBy('d.id', 'DESC')
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+
+            return $query;
     }
     
 

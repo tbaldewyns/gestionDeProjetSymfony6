@@ -1,10 +1,16 @@
 {% extends 'basePdf.html.twig' %}
 
+{% block stylesheets %}
+    <link href="{{ asset('css/pdf/pdf.css') }}" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+{% endblock %}
+
 {% block body %}
 <div class="container">
     <center>
         <div class="datas">
-            <h1>Tab of data</h1>
+            <h1 >Tableau de données</h1>
             <hr>
             <table>
                 <tr>

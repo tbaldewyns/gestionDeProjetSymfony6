@@ -34,6 +34,7 @@ class SecurityController extends AbstractController
             if ($user->getAccountType() == ""){
                 $user->setAccountType("ROLE_ADMIN");
             }
+            $user->setCampus("HELB");
             $manager->getManager()->persist($user);
             //Envoie des données vers la base de données
             $manager->getManager()->flush();
@@ -61,8 +62,8 @@ class SecurityController extends AbstractController
             $user->setEmail("tanguy.baldewyns@gmail.com");
             $hashedPassword = $passwordHasher->hashPassword($user,"aaaaaa");
             $user->setPassword($hashedPassword);
-
             $user->setAccountType("ROLE_SUPERADMIN");
+            $user->setCampus("HELB");
             $manager->getManager()->persist($user);
             //Envoie des données vers la base de données
             $manager->getManager()->flush(); 

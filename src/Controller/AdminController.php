@@ -30,53 +30,49 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/showData', name: 'showData')]
-    public function showData(Request $request, DataFromSensorRepository $dataFromSensorRepo): Response
+    public function showData(Request $request, DataFromSensorRepository $dataFromSensorRepo, LocalRepository $localRepo): Response
     {
+        //Création d'un object de filtrage
         $search = new DataSearch();
-
+        $lastLocal = $localRepo->findLastLocalByCampus("HELB");
         $searchForm = $this->createForm(DataSearchType::class, $search);
 
         $searchForm->handleRequest($request);
-
-        $total = $dataFromSensorRepo->findCountOfData();
-        
-        $limit = 50;
-
+        //Nombre total des données permettant de définir le nombre de page nécessaire pour la pagination
+        $total = $dataFromSensorRepo->findPaginatedCount($search);
+        //Limite d'éléments par page
+        $limit = 100;
+        //Page par défaut 
         $page = (int) $request->query->get("page", 1);
-        
+        //Récuperation des données selon la page, le nombre de données limite et les filtres activés
         $datas = $dataFromSensorRepo->findDataBySearchPaginated($search, $page, $limit);
-        
-        if($request->get('ajax')){
-            return "OK";
-        }
-
-
+        //Si aucunes données n'est enregistrées, la page d'erreur sera adaptée
         if ($datas == null){
             return $this->redirectToRoute("noData", [
             'local' => $search->getLocal()
         ]);
         }
+        //Création des tableaux nécessaires aux graphiques
         $co2DataValue = [];
         $humidityDataValue = [];
         $temperatureDataValue = [];
         $co2Date = [];
         $humidityDate = [];
         $temperatureDate = [];
-
+        //Compteur de données pour le graphique en donut
         $goodCo2Counter = 0;
         $midCo2Counter = 0;
         $badCo2Counter = 0;
-
-
+        //Boucle sur les données récupérées
         foreach ($datas as $dataForChart) {
+            //Attribution des données dans les différents tableaux
             if ($dataForChart->getType()->getValue() == "CO2") {
                 $midValue = $dataForChart->getValue();
                 $co2DataValue[] = $midValue;
                 $co2Date[] = $dataForChart->getSendedAt()->format("d-m-y G:i");
-
                 if($midValue < 600){
                     $goodCo2Counter ++;
-                }else if ($midValue > 600 && $midValue < 900){
+                }else if ($midValue >= 600 && $midValue < 900){
                     $midCo2Counter ++;
                 }else{
                     $badCo2Counter++;
@@ -84,16 +80,12 @@ class AdminController extends AbstractController
             } else if ($dataForChart->getType()->getValue() == "Humidity") {
                 $humidityDataValue[] = $dataForChart->getValue();
                 $humidityDate[] = $dataForChart->getSendedAt()->format("d-m-y G:i");
-
-
             } else if ($dataForChart->getType()->getValue() == "Temperature") {
                 $temperatureDataValue[] = $dataForChart->getValue();
                 $temperatureDate[] = $dataForChart->getSendedAt()->format("d-m-y G:i");
-
-
             }
-            
         }
+        //Envoie des données vers la vue
         return $this->render('admin/showData.html.twig', [
             'datas' => $datas,
             'total' => $total,
@@ -125,25 +117,24 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/localDetails/{local}', name: 'localDetails')]
-    public function localDetails(String $local, DataFromSensorRepository $dataFromSensorRepo, Request $request): Response
+    public function localDetails(String $local, DataFromSensorRepository $dataFromSensorRepo, Request $request, LocalRepository $localRepo): Response
     {
-        $total = $dataFromSensorRepo->findCountOfData();
+        $locals = $localRepo->findLocalByCampus("HELB");
+        $total = $dataFromSensorRepo->findCountOfDataByLocal($local);
         
-        $limit = 50;
+        $limit = 100;
 
         $page = (int) $request->query->get("page", 1);
-        //$dataASC = $dataFromSensorRepo->findByLocal($local, "ASC");
-        $dataASC =  $dataFromSensorRepo->findAllPaginatedASC($page, $limit);
         //$dataFromDB = $dataFromSensorRepo->findByLocal($local, "DESC");
-        $dataFromDB = $dataFromSensorRepo->findAllPaginatedDESC($page, $limit);
+        $dataFromDB = $dataFromSensorRepo->findDataByLocalPaginatedDESC($page, $limit, $local);
         $lastData = $dataFromSensorRepo->findLastDataByLocal($local);
         //dd($total);
-        if ($dataASC == null || $dataFromDB == null || $lastData == null){
+        if ($dataFromDB == null){
             return $this->redirectToRoute("noData", [
             'local' => $local
         ]);
         }
-
+        
         $co2DataValue = [];
         $humidityDataValue = [];
         $temperatureDataValue = [];
@@ -154,17 +145,17 @@ class AdminController extends AbstractController
         $goodCo2Counter = 0;
         $midCo2Counter = 0;
         $badCo2Counter = 0;
+        $interval = 0;
 
-
-        foreach ($dataASC as $dataForChart) {
+        foreach ($dataFromDB as $dataForChart) {
             if ($dataForChart->getType()->getValue() == "CO2") {
                 $midValue = $dataForChart->getValue();
                 $co2DataValue[] = $midValue;
                 $co2Date[] = $dataForChart->getSendedAt()->format("d-m-y G:i");
-
+                
                 if($midValue < 600){
                     $goodCo2Counter ++;
-                }else if ($midValue > 600 && $midValue < 900){
+                }else if ($midValue >= 600 && $midValue < 900){
                     $midCo2Counter ++;
                 }else{
                     $badCo2Counter++;
@@ -180,11 +171,15 @@ class AdminController extends AbstractController
             }
             
         }
-        $currentData = new \DateTime("now");
-        $dateLastData = $lastData->getSendedAt();
-        $interval = $currentData->diff($dateLastData);
+        if ($lastData != null){
+            $currentData = new \DateTime("now");
+            $dateLastData = $lastData->getSendedAt();
+            $interval = $currentData->diff($dateLastData);
+        }
+        
         
         return $this->render('admin/localDetails.html.twig', [
+            'locals' => $locals,
             'datas' => $dataFromDB,
             'lastData' => $lastData,
             'interval' => $interval,
@@ -204,7 +199,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/downloadData/', name: 'downloadData')]
+    #[Route('/admin/downloadData', name: 'downloadData')]
     public function downloadData(Request $request, DataFromSensorRepository $dataFromSensorRepo)
     {
         $currentDate = new \DateTime("now");
@@ -215,6 +210,9 @@ class AdminController extends AbstractController
 
         $searchForm->handleRequest($request);
 
+        $search->setLocal($request->query->get("local"));
+
+        dd($search);
         $datas = $dataFromSensorRepo->findDataBySearch($search);            
         
         $pdfOptions = new Options();
@@ -239,7 +237,7 @@ class AdminController extends AbstractController
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        $fichier = 'infos'.$currentDate->format("d-m-yG:i").".pdf";
+        $fichier = 'infos'.$currentDate->format("d-m-yG:i:ss").".pdf";
 
         $dompdf->stream($fichier, [
             'Attachement' => true
@@ -256,7 +254,6 @@ class AdminController extends AbstractController
         $userList = $userRepo->findAllByDesc();
         
         $local = new Local();
-        $local2 = new Local();
         
         $localForm = $this->createForm(AddLocalType::class, $local);
 

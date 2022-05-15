@@ -90,6 +90,9 @@ class User implements UserInterface , \Serializable, PasswordAuthenticatedUserIn
      */
     public $confirmPassword;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $campus;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -195,5 +198,17 @@ class User implements UserInterface , \Serializable, PasswordAuthenticatedUserIn
             // see section on salt below
             // $this->salt
         ) = unserialize($serialized, array('allowed_classes' => false));
+    }
+
+    public function getCampus(): ?string
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(string $campus): self
+    {
+        $this->campus = $campus;
+
+        return $this;
     }
 }

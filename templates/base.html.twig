@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}HELB Co2 Control{% endblock %}</title>
+        <title>{% block title %}HELB Control{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         {% block stylesheets %}
@@ -16,30 +16,11 @@
             <table>
                 <tr>
                     <td>
-                        {% if is_granted("ROLE_ADMIN") or is_granted("ROLE_SUPERADMIN")%}
-                        <div class="backBtn">
-                            <a onclick="history.back()">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-caret-left" viewBox="0 0 16 16">
-                                    <path
-                                        d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z" />
-                                </svg>
-                            </a>
-                            <a onclick="history.forward()">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-caret-right"
-                                    viewBox="0 0 16 16">
-                                    <path
-                                        d="M6 12.796V3.204L11.481 8 6 12.796zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753z" />
-                                </svg>
-                            </a>
-                        </div>
-                        {% endif %}
-                    </td>
-                    <td>
                         <div class="logo">
                             <a href="{{ path('login')}}"><img src="{{ asset('image/logoBlancV2.png') }}" alt=""></a>
                         </div>
                     </td>
-                    
+                {% if app.user %}
                     <td>
                         <div class="settingLogo">
                             <a href="{{ path('settings')}}">
@@ -50,8 +31,8 @@
                             </a>
                         </div>
                     </td>
-
-                    {% if app.user %}
+                    
+                    
                     <td>
                         <div class="settingLogo">
                             <a href="{{path('editUser', {id: app.user.id})}}">
@@ -60,7 +41,8 @@
                                 </svg>
                             </a>
                         </div>
-                    </td>{% endif %}
+                    </td>
+                {% endif %}
                 </tr>
             </table>
         </center>

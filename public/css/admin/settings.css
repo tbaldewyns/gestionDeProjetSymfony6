@@ -15,12 +15,9 @@
     color: rgba(102, 192, 210, 1);
 }
 .dataTable{
-    height: 250px;
-    width: 600px;
+    height: 80%;
+    width: 100%;
     overflow: scroll;
-    -ms-overflow-style: none;
-        /* IE and Edge */
-        scrollbar-width: none;
 }
 
 .dataTable::-webkit-scrollbar-corner {
@@ -83,4 +80,14 @@ button{
 button:hover{
     opacity: 50%;
     transition: 1s;
+}
+
+@media screen and (max-width: 670px) {
+    .setting {
+        height: 400px;
+        width: 450px;
+    }
+        .dataTable {
+            font-size: 12px;
+        }
 }

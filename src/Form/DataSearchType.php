@@ -38,10 +38,10 @@ class DataSearchType extends AbstractType
             ])
             ->add('frequence', ChoiceType::class, [
                 "choices" => [
-                    "Week" => "Week", 
-                    "Month" => "Month",
-                    "Trimsestre" => "Trimsestre",
-                    'Year' => 'Year'
+                    "Dernière semaine" => "Week", 
+                    "Dernier mois" => "Month",
+                    "Dernier trimestre" => "Trimsestre",
+                    'Dernière année' => 'Year'
                   ],
                   'required' => false,
                   'label' => false,

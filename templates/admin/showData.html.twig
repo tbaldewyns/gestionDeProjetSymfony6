@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
+<!--Lien avec le CSS de la page-->
 <link href="{{ asset('css/admin/showData.css') }}" rel="stylesheet" />
+<!--Lien avec la librairie Chart.Js-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 {% endblock %}
 
@@ -11,10 +12,8 @@
 {% block body %}
 <div class="container">
     <center>
-
         <div class="form">
-            <form class="searchForm">
-                {{form_start(searchForm)}}
+            {{form_start(searchForm)}}
             {{ form_errors(searchForm) }}
             <div class="inputs">
                 <div class="input">
@@ -26,22 +25,23 @@
                 <div class="input">
                     {{form_row(searchForm.frequence)}}
                 </div>
-                <div class="input">
+            </div>
+            <div class="btns">
+                <div class="btn">
                     <button type="submit">Search</button>
                 </div>
-                <div class="input" id="downloadBtn">
+                <div class="btn">
                     <a href="{{path('downloadData')}}">Download pdf</a>
                 </div>
             </div>
-
             {{form_end(searchForm)}}
-            </form>
         </div>
         <div class="pagination">
             {% for page in 1..((total / limit) | round(0, 'ceil')) %}
                 <a href="?page={{ page }}">{{page}}</a>
             {% endfor %}
         </div>
+        <!--Affiche le graphique s'il y a des données-->
         {% if co2DataValue|length > 2%}
             <div class="charts">
                 <canvas id="pieChart"></canvas>
@@ -50,11 +50,13 @@
                 <canvas id="co2Chart"></canvas>
             </div>
             {% endif %}
+        <!--Affiche le graphique s'il y a des données-->
             {% if humidityDataValue|length > 2%}
             <div class="charts">
                 <canvas id="humidityChart"></canvas>
             </div>
             {% endif %}
+        <!--Affiche le graphique s'il y a des données-->
             {% if temperatureDataValue|length > 2%}
             <div class="charts">
                 <canvas id="temperatureChart"></canvas>
@@ -109,9 +111,8 @@
 
 {% block javascripts %}
 
-<script src="{{ asset('js/filtres.js') }}"></script>
-
 <script>
+
     let co2Categories = document.querySelector("#co2Chart")
     let co2categGraph = new Chart(co2Categories, {
         type: "line",

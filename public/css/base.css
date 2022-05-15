@@ -1,6 +1,10 @@
 * {
   font-family: "Times New Roman", Times, serif;
 }
+
+input{
+    box-shadow: 10px 5px 5px lightgray;
+}
 .loader{
     height: 700px;
     width: 700px;
@@ -88,10 +92,39 @@ a {
   top: 10%;
   right: -30%;
 }
-.shape3 {
-  top: 5%;
-  right: -50%;
+
+ul {
+    list-style: none;
+    font-size: 10px;
+    color: white;
+    background-color: lightcoral;
+    padding: 5px;
+    margin: 2px;
+    width: fit-content;
+    border-radius: 10px;
 }
+
+.pagination {
+    background-color: white;
+    margin-top: 10px;
+    padding: 10px;
+    width: fit-content;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.pagination a {
+    background-color: rgba(102, 192, 210, 1);
+    padding: 8px;
+    color: white;
+    border-radius: 10px;
+    margin-top: 25px;
+}
+
+.pagination a:hover {
+    opacity: 50%;
+}
+
 
 @media screen and (max-width: 1000px) {
   .shape1 {
@@ -110,8 +143,18 @@ a {
 }
 
 @media screen and (max-width: 600px) {
-  .logo img {
-    height: 62px;
+header div {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.logo img {
+    height: 40px;
+  }
+  .settingLogo svg{
+      height: 20px;
+  }
+  .backBtn a svg{
+      height: 20px;
   }
   .shape1 {
     height: 400px;
@@ -126,32 +169,4 @@ a {
     top: 30%;
     right: -55%;
   }
-}
-ul{
-    list-style: none;
-    font-size: 10px;
-    color: white;
-    background-color: lightcoral;
-    padding: 5px;
-    margin: 2px;
-    width: fit-content;
-    border-radius: 10px;
-}
-
-.pagination {
-    background-color: white;
-    padding: 10px;
-    width: 50%;
-    border-radius: 10px;
-}
-.pagination a{
-    background-color: rgba(102, 192, 210, 1);
-    padding: 8px;
-    color: white;
-    border-radius: 10px;
-    margin-top: 25px;
-}
-
-.pagination a:hover {
-    opacity: 50%;
 }

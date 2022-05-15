@@ -6,13 +6,12 @@
   display: inline-flex;
 }
 .input {
-  margin: 10px;
   margin-left: 10px;
   margin-right: 10px;
   padding: 10px;
 }
-.inputs button,
-.inputs a {
+
+.inputs .input a {
   border: none;
   border-radius: 10px;
   padding: 10px;
@@ -21,8 +20,19 @@
   background-color: white;
   color: black;
 }
-#downloadBtn {
-  float: right;
+.btn{
+    display: inline-block;
+}
+.btn button, .btn a{
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10pxm;
+    height: 30px;
+    width: 300px;
+    background-color: white;
+    color: black;
+    font-size: 14px;
 }
 .input button:hover {
   opacity: 50%;
