@@ -42,7 +42,7 @@
                             <div class="local">
                                 local {{lastData.local}}
                             </div>
-                            {% if interval.i >= 5 or interval.h > 0 or interval.d > 0 or interval.m > 0 %}
+                            {% if interval.i >= 6 or interval.h > 0 or interval.d > 0 or interval.m > 0 %}
                             <div class="diffDate" id="whiteText">
                                 <p>La dernière mesure à été prise il y a :</p>
                                 <p>
@@ -205,7 +205,7 @@
     let pieCategGraph = new Chart(pieCategories, {
         type: "doughnut",
         data: {
-            labels: [{{(goodCo2Counter / datas|length) * 100}} + "% <600" ,{{(midCo2Counter / limit) * 100}} + "% >600 & < 900", {{(badCo2Counter / limit) * 100}} +"% >900"],
+            labels: [{{goodCO2DataPourcentage}} + "% <600" ,{{midCO2DataPourcentage}} + "% >600 & < 900", {{badCO2DataPourcentage}} +"% >900"],
             datasets: [{
                 data:[{{goodCo2Counter}}, {{midCo2Counter}}, {{badCo2Counter}}],
                 backgroundColor: ["green", "orange", "red"] 

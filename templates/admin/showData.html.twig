@@ -196,7 +196,7 @@
     let pieCategGraph = new Chart(pieCategories, {
         type: "doughnut",
         data: {
-            labels: ["<600", ">600 & < 900", ">900"],
+            labels: [{{goodCO2DataPourcentage}} + "% <600" ,{{midCO2DataPourcentage}} + "% >600 & < 900", {{badCO2DataPourcentage}} +"% >900"],
             datasets: [{
                 data: [{{ goodCo2Counter }}, {{ midCo2Counter }}, {{ badCo2Counter }}],
             backgroundColor: ["green", "orange", "red"] 

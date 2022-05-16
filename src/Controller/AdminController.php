@@ -94,10 +94,18 @@ class AdminController extends AbstractController
                 $temperatureDataValue[] = $dataForChart->getValue();
                 $temperatureDate[] = $dataForChart->getSendedAt()->format("d-m-y G:i");
             }
+            
         }
+        $goodCO2DataPourcentage = round(($goodCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100);
+        $midCO2DataPourcentage = round(($midCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100);
+        $badCO2DataPourcentage = round(($badCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100) ;
+        //dd(($goodCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100);   
         //Envoie des données vers la vue
         return $this->render('admin/showData.html.twig', [
             'datas' => $datas,
+            'goodCO2DataPourcentage' => json_encode($goodCO2DataPourcentage),
+            'midCO2DataPourcentage' => json_encode($midCO2DataPourcentage),
+            'badCO2DataPourcentage' => json_encode($badCO2DataPourcentage),
             'co2DataValue' => json_encode($co2DataValue),
             'humidityDataValue' => json_encode($humidityDataValue),
             'temperatureDataValue' => json_encode($temperatureDataValue),
@@ -178,6 +186,10 @@ class AdminController extends AbstractController
 
             }
             
+            $goodCO2DataPourcentage = round(($goodCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100);
+            $midCO2DataPourcentage = round(($midCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100);
+            $badCO2DataPourcentage = round(($badCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100) ;
+        
         }
         if ($lastData != null){
             //Ajout de deux heures à la date actuelle pour être compatible avec l'heure de la bdd (VPS)
@@ -201,6 +213,9 @@ class AdminController extends AbstractController
             'co2DataValue' => json_encode($co2DataValue),
             'humidityDataValue' => json_encode($humidityDataValue),
             'temperatureDataValue' => json_encode($temperatureDataValue),
+            'goodCO2DataPourcentage' => json_encode($goodCO2DataPourcentage),
+            'midCO2DataPourcentage' => json_encode($midCO2DataPourcentage),
+            'badCO2DataPourcentage' => json_encode($badCO2DataPourcentage),
             'dataValue' => json_encode($temperatureDataValue),
             'co2Date' => json_encode($co2Date),
             'humidityDate' => json_encode($humidityDate),
