@@ -24,7 +24,6 @@ class DataSearch{
 
     private $frequence;
 
-
      public function getType(): ?string
     {
         return $this->type;

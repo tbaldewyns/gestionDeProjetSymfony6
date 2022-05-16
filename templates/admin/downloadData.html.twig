@@ -28,17 +28,25 @@
                     {% for data in datas %}
                     <tr>
                         {% if data.type.id == 1 %}                        
-                        {% if data.value > data.type.maxAlarm or data.value < data.type.minAlarm %}
-                        <td style="color: red;">{{data.value}} ppm</td>
-                        {% else %}
-                        <td>{{data.value}} ppm</td>
-                        {% endif %}
+                            {% if data.value > data.type.maxAlarm or data.value < data.type.minAlarm %}
+                            <td style="color: red;">{{data.value}} ppm</td>
+                            {% else %}
+                            <td>{{data.value}} ppm</td>
+                            {% endif %}
                         {% endif %}
                         {% if data.type.id == 2 %}
-                        <td>{{data.value}} %</td>
+                            {% if data.value > data.type.maxAlarm or data.value < data.type.minAlarm %}
+                            <td style="color: red;">{{data.value}} %</td>
+                            {% else %}
+                            <td>{{data.value}} %</td>
+                            {% endif %}
                         {% endif %}
                         {% if data.type.id == 3 %}
-                        <td>{{data.value}} °C</td>
+                            {% if data.value > data.type.maxAlarm or data.value < data.type.minAlarm %}
+                            <td style="color: red;">{{data.value}} °C</td>
+                            {% else %}
+                            <td>{{data.value}} °C</td>
+                            {% endif %}
                         {% endif %}
                         <td>{{data.type.value}}</td>
                         <td>{{data.local}}</td>

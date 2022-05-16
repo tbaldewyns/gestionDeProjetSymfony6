@@ -22,6 +22,7 @@ class Controller extends AbstractController
     {
 
         $lastData = $dataFromSensorRepository->findLastDataByLocal($local);
+        
         if($lastData == null){
             return $this->redirectToRoute("noData", [
             'local' => $local

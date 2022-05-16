@@ -54,7 +54,7 @@ class SecurityController extends AbstractController
     {
 
         $userList = $userRepo->findAll();
-
+        //S'il n'y a pas d'users
         if($userList == null){
             $user = new User();
             $user->setFirstname("Tanguy");
@@ -68,7 +68,7 @@ class SecurityController extends AbstractController
             //Envoie des données vers la base de données
             $manager->getManager()->flush(); 
         }
-        
+        // Si l'user est déjà connecté
         if ($this->getUser() != null){
             return $this->redirectToRoute('userprofile', [
             'id' => $this->getUser()->getUserIdentifier()

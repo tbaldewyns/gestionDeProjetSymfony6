@@ -28,13 +28,15 @@ class EditController extends AbstractController
         if ($this->getUser()->getUserIdentifier() != $user->getId()) {
             return $this->redirectToRoute('error403');
         }
+        //Edition de l'user de donées selon le formulaire
+
         $infosForm = $this->createForm(UserInfosType::class, $user);
 
         $infosForm->handleRequest($request);
         if ($infosForm->isSubmitted() && $infosForm->isValid()) {
 
             $manager->getManager()->flush();
-            $this->addFlash("success", "Vos informations ont été modifié.e.s");
+            $this->addFlash("success", "Vos informations ont été modifiées");
             return $this->redirectToRoute('editUser', [
                 'id' => $user->getId()
             ]);
@@ -69,14 +71,14 @@ class EditController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('error404');
         }
-        
+        //Edition du type de donées selon le formulaire
         $dataTypeForm = $this->createForm(AddDataTypeType::class, $dataType);
 
         $dataTypeForm->handleRequest($request);
         if ($dataTypeForm->isSubmitted() && $dataTypeForm->isValid()) {
 
             $manager->getManager()->flush();
-            $this->addFlash("success", "Vos informations ont été modifié.e.s");
+            $this->addFlash("success", "Vos informations ont été modifiées");
             return $this->redirectToRoute('settings');
         }
         
@@ -92,6 +94,7 @@ class EditController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('error404');
         }
+        //Edition du local selon le formulaire
         
         $localForm = $this->createForm(AddLocalType::class, $local);
 
@@ -99,7 +102,7 @@ class EditController extends AbstractController
         if ($localForm->isSubmitted() && $localForm->isValid()) {
 
             $manager->getManager()->flush();
-            $this->addFlash("success", "Vos informations ont été modifié.e.s");
+            $this->addFlash("success", "Vos informations ont été modifiées");
             return $this->redirectToRoute('settings');
         }
         

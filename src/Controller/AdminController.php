@@ -26,13 +26,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminController extends AbstractController
 {
-    
-    #[Route('/admin', name: 'admin')]
-    public function admin(): Response
-    {
-        return $this->render('admin/index.html.twig', []);
-    }
-
     #[Route('/admin/showData', name: 'showData')]
     public function showData(RequestStack $requestStack, Request $request, DataFromSensorRepository $dataFromSensorRepo, LocalRepository $localRepo): Response
     {
@@ -40,9 +33,9 @@ class AdminController extends AbstractController
         //Création d'un object de filtrage
         $search = new DataSearch();
         $searchForm = $this->createForm(DataSearchType::class, $search);
-
+        //Analyse du formulaire
         $searchForm->handleRequest($request);
-       
+        //Récuperation de la session
         $session = $requestStack->getSession();
 
         // the second argument is the value returned when the attribute doesn't exist
@@ -96,10 +89,10 @@ class AdminController extends AbstractController
             }
             
         }
+        //Création des variables de pourcentage utilisées dans le graphique en donut
         $goodCO2DataPourcentage = round(($goodCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100);
         $midCO2DataPourcentage = round(($midCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100);
         $badCO2DataPourcentage = round(($badCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100) ;
-        //dd(($goodCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100);   
         //Envoie des données vers la vue
         return $this->render('admin/showData.html.twig', [
             'datas' => $datas,
@@ -120,12 +113,13 @@ class AdminController extends AbstractController
         ]);
     }
 
+    //Etage 1
     #[Route('/admin/stage1', name: 'stage1')]
     public function stage1(): Response
     {
         return $this->render('admin/stage1.html.twig', []);
     }
-
+    //Etage 2
     #[Route('/admin/stage2', name: 'stage2')]
     public function stage2(): Response
     {
@@ -135,35 +129,40 @@ class AdminController extends AbstractController
     #[Route('/admin/localDetails/{local}', name: 'localDetails')]
     public function localDetails(String $local, DataFromSensorRepository $dataFromSensorRepo, Request $request, LocalRepository $localRepo): Response
     {
+        //Récupère tous les locaux de la HELB
         $locals = $localRepo->findLocalByCampus("HELB");
+        //Récupère le nombre total de données présent dans la BDD (paginations)
         $total = $dataFromSensorRepo->findCountOfDataByLocal($local);
-        
+        //Limite de données par page
         $limit = 100;
-
+        //Page actuelle 
         $page = (int) $request->query->get("page", 1);
         //$dataFromDB = $dataFromSensorRepo->findByLocal($local, "DESC");
         $dataFromDB = $dataFromSensorRepo->findDataByLocalPaginatedDESC($page, $limit, $local);
+        //Récupération de la dernière donnée pour l'afficher dans le carré
         $lastData = $dataFromSensorRepo->findLastDataByLocal($local);
-        //dd($total);
+        //S'il la bdd est vide
         if ($dataFromDB == null){
             return $this->redirectToRoute("noData", [
             'local' => $local
         ]);
         }
-        
+        //Création des tableaux nécessaires aux graphiques
         $co2DataValue = [];
         $humidityDataValue = [];
         $temperatureDataValue = [];
         $co2Date = [];
         $humidityDate = [];
         $temperatureDate = [];
-
+        //Compteur de données pour le graphique en donut
         $goodCo2Counter = 0;
         $midCo2Counter = 0;
         $badCo2Counter = 0;
         $interval = 0;
-
+        
+        //Boucle sur les données récupérées
         foreach ($dataFromDB as $dataForChart) {
+            //Attribution des données dans les différents tableaux
             if ($dataForChart->getType()->getId() == 1) {
                 $midValue = $dataForChart->getValue();
                 $co2DataValue[] = $midValue;
@@ -186,6 +185,7 @@ class AdminController extends AbstractController
 
             }
             
+            //Création des variables de pourcentage utilisées dans le graphique en donut    
             $goodCO2DataPourcentage = round(($goodCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100);
             $midCO2DataPourcentage = round(($midCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100);
             $badCO2DataPourcentage = round(($badCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100) ;
@@ -201,7 +201,6 @@ class AdminController extends AbstractController
             //Calcule de l'interval entre les deux dates
             $interval = $currentData->diff($dateLastData);
         }
-        
         
         return $this->render('admin/localDetails.html.twig', [
             'locals' => $locals,
@@ -283,14 +282,17 @@ class AdminController extends AbstractController
 
     #[Route('/admin/settings', name: 'settings')]
     public function settings(Request $request, ManagerRegistry $manager, UserRepository $userRepo, LocalRepository $localRepo, DataTypeRepository $datatypeRepo): Response
-    {   
+    {   //Récupération des données de l'utilisateur connecté pour récupérer ses données
         $user = $userRepo->findCurrentUser($this->getUser()->getUserIdentifier());
+        //Récupératon de son campus pour y afficher seulement les données qui le concernent
         $currentUserCampus = $user->getCampus();
-        
+        //Récupère tous les types de données
         $dataTypeList = $datatypeRepo->findAll();
+        //Récupère tous les locaux pour le campus
         $localList = $localRepo->findLocalByCampus($currentUserCampus);
+        //Récupère tous les users
         $userList = $userRepo->findAllByDesc();
-        
+        //Création d'un local si le formulaire est rempli et valide
         $local = new Local();
         
         $localForm = $this->createForm(AddLocalType::class, $local);
@@ -306,6 +308,7 @@ class AdminController extends AbstractController
             $this->addFlash("success", "Le local à bien été créé");
             return $this->redirectToRoute('settings');
         }
+        //Création d'un type de donnée si le formulaire est rempli et valide
 
         $dataType = new DataType();
         
