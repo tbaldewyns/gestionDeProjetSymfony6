@@ -3,7 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Local;
+use App\Entity\DataType;
+use App\Form\AddLocalType;
 use App\Form\UserInfosType;
+use App\Form\AddDataTypeType;
 use App\Form\PasswordInfosType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,4 +62,52 @@ class EditController extends AbstractController
             'user' => $user,
         ]);
     }
+
+    #[Route('/editDataType/{id}', name: 'editDataType')]
+    public function editDataType(DataType $dataType, Request $request, ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('error404');
+        }
+        
+        $dataTypeForm = $this->createForm(AddDataTypeType::class, $dataType);
+
+        $dataTypeForm->handleRequest($request);
+        if ($dataTypeForm->isSubmitted() && $dataTypeForm->isValid()) {
+
+            $manager->getManager()->flush();
+            $this->addFlash("success", "Vos informations ont été modifié.e.s");
+            return $this->redirectToRoute('settings');
+        }
+        
+        return $this->render('edit/editDataType.html.twig', [
+            'dataTypeForm' => $dataTypeForm->createView(),
+            'dataType' => $dataType,
+        ]);
+    }
+
+    #[Route('/editLocal/{id}', name: 'editLocal')]
+    public function editLocal(Local $local, Request $request, ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('error404');
+        }
+        
+        $localForm = $this->createForm(AddLocalType::class, $local);
+
+        $localForm->handleRequest($request);
+        if ($localForm->isSubmitted() && $localForm->isValid()) {
+
+            $manager->getManager()->flush();
+            $this->addFlash("success", "Vos informations ont été modifié.e.s");
+            return $this->redirectToRoute('settings');
+        }
+        
+        return $this->render('edit/editLocal.html.twig', [
+            'localForm' => $localForm->createView(),
+            'local' => $local,
+        ]);
+    }
+    
+    
 }

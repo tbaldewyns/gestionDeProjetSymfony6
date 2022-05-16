@@ -81,4 +81,14 @@ class UserRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findCurrentUser($id)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.id = :val')
+            ->setParameter('val', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

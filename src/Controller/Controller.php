@@ -47,6 +47,9 @@ class Controller extends AbstractController
      #[Route('/noData/{local}', name: 'noData')]
     public function noData(String $local): Response
     {
+        if ($local == null){
+            $local = "choisi";
+        }
         return $this->render('admin/noData.html.twig', [
             'local' => $local
         ]);

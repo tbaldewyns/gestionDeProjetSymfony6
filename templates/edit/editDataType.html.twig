@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/security/login.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <center>
+        
+        <div class="editCard">
+            <div class="formTitle" id="editUserForm">
+                Editer type {{dataType.value}}
+            </div>
+            <div class="editForm">
+                {% for message in app.flashes("success") %}
+                <div class="message">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {{form_start(dataTypeForm)}}
+                <div class="names">
+                    {{form_row(dataTypeForm.value, {'attr':{'placeholder':'Type'}})}}
+                    
+                </div>
+                <div class="passwords">
+                    {{form_row(dataTypeForm.minAlarm, {'attr':{'placeholder':'Alarme Min'}})}}
+                    {{form_row(dataTypeForm.maxAlarm, {'attr':{'placeholder':'Alarme Max'}})}}
+                </div>
+                <hr>
+                <div class="btn">
+                    <button type="submit" class="editBtn"><span>Editer</span></button>
+                </div>
+                {{form_end(dataTypeForm)}}
+            </div>
+        </div>
+    </center>
+</div>
+{% endblock %}

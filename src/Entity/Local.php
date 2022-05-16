@@ -44,6 +44,7 @@ class Local
     private $sensors;
 
     #[ORM\OneToMany(mappedBy: 'local', targetEntity: DataFromSensor::class)]
+
     private $dataFromSensors;
 
     public function __construct()

@@ -107,3 +107,18 @@ hr {
 .email input {
   width: 350px;
 }
+
+@media screen and (max-width: 550px) {
+    #editUserForm {
+        font-size: 25px;
+    }
+    .editCard {
+        width: 95%;
+    }
+    .editCard .names input, .editCard .passwords input {
+        width: 140px;
+    }
+    .editCard .email input {
+        width: 220px;
+    }
+}

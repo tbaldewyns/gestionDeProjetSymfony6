@@ -71,13 +71,13 @@
                     </tr>
                     {% for data in datas %}
                     <tr>
-                        {% if data.type == "CO2" %}
+                        {% if data.type.id == 1 %}
                         <td>{{data.value}} ppm</td>
                         {% endif %}
-                        {% if data.type == "Humidity" %}
-                        <td>{{data.value * 100}} %</td>
+                        {% if data.type.id == 2 %}
+                        <td>{{data.value }} %</td>
                         {% endif %}
-                        {% if data.type == "Temperature" %}
+                        {% if data.type.id == 3 %}
                         <td>{{data.value}} °C</td>
                         {% endif %}
                         <td>{{data.type}}</td>
@@ -135,7 +135,7 @@
                     ticks: {
                         beginAtZero: true,
                         min: 0,
-                        max: 3000                          
+                        max: 2000                          
                     }                  
                     
                 }]
@@ -163,7 +163,7 @@
                     ticks: {
                         beginAtZero: true,
                         min: 0,
-                        max: 1                          
+                        max: 100                          
                     }                  
                     
                 }]

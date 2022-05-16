@@ -16,9 +16,10 @@ class AddLocalType extends AbstractType
             ->add('local', TextType::class, [
                 'label' => false,
             ])
-            ->add('campus', TextType::class,[
+            ->add('campus', TextType::class, [
                 'label' => false,
             ])
+            
         ;
     }
 

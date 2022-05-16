@@ -33,11 +33,13 @@ class DataSearchType extends AbstractType
                     return $repo->createQueryBuilder('l')
                     ->orderBy('l.local', 'ASC');;
                 },
-                'required' => true,
-                'label' => false
+                'required' => false,
+                'label' => false,
+                'placeholder' => "local",
             ])
             ->add('frequence', ChoiceType::class, [
                 "choices" => [
+                    'Dernier jour' => 'Day',
                     "Dernière semaine" => "Week", 
                     "Dernier mois" => "Month",
                     "Dernier trimestre" => "Trimsestre",

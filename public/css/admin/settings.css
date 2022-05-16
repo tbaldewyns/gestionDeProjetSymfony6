@@ -15,16 +15,12 @@
     color: rgba(102, 192, 210, 1);
 }
 .dataTable{
-    height: 80%;
+    height: 250px;
     width: 100%;
     overflow: scroll;
 }
 
-.dataTable::-webkit-scrollbar-corner {
-    display: none;
-}
-
-#localTable table th{
+#localTable table th, #manageAccount table th, #manageLimits  table th{
     width: 110px;
 
 }
@@ -39,11 +35,18 @@ table th{
     color: white;
     padding: 5px;
 }
+
 .editSvg{
     color: darkcyan;
 }
 .deleteSvg{
     color: red;
+}
+
+#editUserSvg {
+    color: grey;
+    opacity: 70%;
+    pointer-events: none;
 }
 .form{
     position: absolute;
@@ -61,6 +64,8 @@ input{
     height: 40px;
     border-radius: 10px;
     border: none;
+    margin-left: 15px;
+    margin-right: 15px;
 }
 input:focus{
     outline: none;
@@ -87,7 +92,23 @@ button:hover{
         height: 400px;
         width: 450px;
     }
-        .dataTable {
-            font-size: 12px;
-        }
+    .dataTable {
+        font-size: 12px;
+    }
+    table th,
+    table td {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+@media screen and (max-width: 495px) {
+    .setting {
+        width: 90%;
+        height: 400px;
+    }
+
+    .dataTable {
+        font-size: 12px;
+    }
 }

@@ -2,8 +2,6 @@
 
 {% block stylesheets %}
     <link href="{{ asset('css/pdf/pdf.css') }}" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 {% endblock %}
 
 {% block body %}
@@ -29,13 +27,17 @@
                 {% else %}
                     {% for data in datas %}
                     <tr>
-                        {% if data.type.value == "CO2" %}
+                        {% if data.type.id == 1 %}                        
+                        {% if data.value > data.type.maxAlarm or data.value < data.type.minAlarm %}
+                        <td style="color: red;">{{data.value}} ppm</td>
+                        {% else %}
                         <td>{{data.value}} ppm</td>
                         {% endif %}
-                        {% if data.type.value == "Humidity" %}
-                        <td>{{data.value * 100}} %</td>
                         {% endif %}
-                        {% if data.type.value == "Temperature" %}
+                        {% if data.type.id == 2 %}
+                        <td>{{data.value}} %</td>
+                        {% endif %}
+                        {% if data.type.id == 3 %}
                         <td>{{data.value}} °C</td>
                         {% endif %}
                         <td>{{data.type.value}}</td>

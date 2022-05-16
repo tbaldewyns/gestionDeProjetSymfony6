@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use App\Entity\User;
 use App\Entity\Local;
 use App\Entity\DataType;
 use App\Entity\DataSearch;
@@ -18,6 +19,8 @@ use App\Repository\DataFromSensorRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminController extends AbstractController
@@ -30,26 +33,32 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/showData', name: 'showData')]
-    public function showData(Request $request, DataFromSensorRepository $dataFromSensorRepo, LocalRepository $localRepo): Response
+    public function showData(RequestStack $requestStack, Request $request, DataFromSensorRepository $dataFromSensorRepo, LocalRepository $localRepo): Response
     {
+
         //Création d'un object de filtrage
         $search = new DataSearch();
-        $lastLocal = $localRepo->findLastLocalByCampus("HELB");
         $searchForm = $this->createForm(DataSearchType::class, $search);
 
         $searchForm->handleRequest($request);
-        //Nombre total des données permettant de définir le nombre de page nécessaire pour la pagination
-        $total = $dataFromSensorRepo->findPaginatedCount($search);
-        //Limite d'éléments par page
-        $limit = 100;
-        //Page par défaut 
-        $page = (int) $request->query->get("page", 1);
+       
+        $session = $requestStack->getSession();
+
+        // the second argument is the value returned when the attribute doesn't exist
+        $session->set('type', $search->getType());
+        $session->set('local', $search->getLocal());
+        $session->set('frequence', $search->getFrequence());
+
         //Récuperation des données selon la page, le nombre de données limite et les filtres activés
-        $datas = $dataFromSensorRepo->findDataBySearchPaginated($search, $page, $limit);
+        $datas = $dataFromSensorRepo->findDataBySearch($search);
         //Si aucunes données n'est enregistrées, la page d'erreur sera adaptée
         if ($datas == null){
+            $local = $search->getLocal();
+            if ($local == null){
+                $local = "choisi";
+            }
             return $this->redirectToRoute("noData", [
-            'local' => $search->getLocal()
+            'local' =>$local
         ]);
         }
         //Création des tableaux nécessaires aux graphiques
@@ -66,7 +75,7 @@ class AdminController extends AbstractController
         //Boucle sur les données récupérées
         foreach ($datas as $dataForChart) {
             //Attribution des données dans les différents tableaux
-            if ($dataForChart->getType()->getValue() == "CO2") {
+            if ($dataForChart->getType()->getId() == 1) {
                 $midValue = $dataForChart->getValue();
                 $co2DataValue[] = $midValue;
                 $co2Date[] = $dataForChart->getSendedAt()->format("d-m-y G:i");
@@ -77,10 +86,10 @@ class AdminController extends AbstractController
                 }else{
                     $badCo2Counter++;
                 }
-            } else if ($dataForChart->getType()->getValue() == "Humidity") {
+            } else if ($dataForChart->getType()->getId() == 2) {
                 $humidityDataValue[] = $dataForChart->getValue();
                 $humidityDate[] = $dataForChart->getSendedAt()->format("d-m-y G:i");
-            } else if ($dataForChart->getType()->getValue() == "Temperature") {
+            } else if ($dataForChart->getType()->getId() == 3) {
                 $temperatureDataValue[] = $dataForChart->getValue();
                 $temperatureDate[] = $dataForChart->getSendedAt()->format("d-m-y G:i");
             }
@@ -88,8 +97,6 @@ class AdminController extends AbstractController
         //Envoie des données vers la vue
         return $this->render('admin/showData.html.twig', [
             'datas' => $datas,
-            'total' => $total,
-            'limit' => $limit,
             'co2DataValue' => json_encode($co2DataValue),
             'humidityDataValue' => json_encode($humidityDataValue),
             'temperatureDataValue' => json_encode($temperatureDataValue),
@@ -148,7 +155,7 @@ class AdminController extends AbstractController
         $interval = 0;
 
         foreach ($dataFromDB as $dataForChart) {
-            if ($dataForChart->getType()->getValue() == "CO2") {
+            if ($dataForChart->getType()->getId() == 1) {
                 $midValue = $dataForChart->getValue();
                 $co2DataValue[] = $midValue;
                 $co2Date[] = $dataForChart->getSendedAt()->format("d-m-y G:i");
@@ -160,11 +167,11 @@ class AdminController extends AbstractController
                 }else{
                     $badCo2Counter++;
                 }
-            } else if ($dataForChart->getType()->getValue() == "Humidity") {
+            } else if ($dataForChart->getType()->getId() == 2) {
                 $humidityDataValue[] = $dataForChart->getValue();
                 $humidityDate[] = $dataForChart->getSendedAt()->format("d-m-y G:i");
 
-            } else if ($dataForChart->getType()->getValue() == "Temperature") {
+            } else if ($dataForChart->getType()->getId() == 3) {
                 $temperatureDataValue[] = $dataForChart->getValue();
                 $temperatureDate[] = $dataForChart->getSendedAt()->format("d-m-y G:i");
 
@@ -200,25 +207,32 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/downloadData', name: 'downloadData')]
-    public function downloadData(Request $request, DataFromSensorRepository $dataFromSensorRepo)
+    public function downloadData(RequestStack $requestStack, Request $request, DataFromSensorRepository $dataFromSensorRepo)
     {
+        //récuration de la date actuelle 
         $currentDate = new \DateTime("now");
-
+        //Création du filtre qui va s'appliquer dans les données du PDF
         $search = new DataSearch();
-
-        $searchForm = $this->createForm(DataSearchType::class, $search);
-
-        $searchForm->handleRequest($request);
-
-        $search->setLocal($request->query->get("local"));
-
-        dd($search);
-        $datas = $dataFromSensorRepo->findDataBySearch($search);            
+        //Récupération des données de session 
+        $session = $requestStack->getSession();
+        //Mise en place du fltre selon les données récupérées lors de l'affichage globale des données
+        if($session->get('type')){
+            $search->setType($session->get('type'));
+        }
+        if ($session->get('local')){
+            $search->setLocal($session->get('local'));
+        }
+        if ($session->get('frequence')){
+            $search->setFrequence($session->get('frequence'));
+        }
         
+        //Recherche des données selon le filtre
+        $datas = $dataFromSensorRepo->findDataBySearch($search);            
+        //Création du PDF en y ajoutant différentes options
         $pdfOptions = new Options();
         $pdfOptions->set('defaultFont', 'Arial');
         $pdfOptions->setIsRemoteEnabled(true);
-
+        
         $dompdf = new Dompdf($pdfOptions);
         $context = stream_context_create([
             'ssl' => [
@@ -237,7 +251,7 @@ class AdminController extends AbstractController
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        $fichier = 'infos'.$currentDate->format("d-m-yG:i:ss").".pdf";
+        $fichier = 'HELB_Rapport_Donnees_'.$currentDate->format("d-m-yG:i:ss").".pdf";
 
         $dompdf->stream($fichier, [
             'Attachement' => true
@@ -248,9 +262,12 @@ class AdminController extends AbstractController
 
     #[Route('/admin/settings', name: 'settings')]
     public function settings(Request $request, ManagerRegistry $manager, UserRepository $userRepo, LocalRepository $localRepo, DataTypeRepository $datatypeRepo): Response
-    {
+    {   
+        $user = $userRepo->findCurrentUser($this->getUser()->getUserIdentifier());
+        $currentUserCampus = $user->getCampus();
+        
         $dataTypeList = $datatypeRepo->findAll();
-        $localList = $localRepo->findLocalByCampus("HELB");
+        $localList = $localRepo->findLocalByCampus($currentUserCampus);
         $userList = $userRepo->findAllByDesc();
         
         $local = new Local();
@@ -258,6 +275,8 @@ class AdminController extends AbstractController
         $localForm = $this->createForm(AddLocalType::class, $local);
 
         $localForm->handleRequest($request);
+        $local->setCampus($currentUserCampus);
+        
         if ($localForm->isSubmitted() && $localForm->isValid()) {
             
             $manager->getManager()->persist($local);

@@ -176,6 +176,7 @@ class User implements UserInterface , \Serializable, PasswordAuthenticatedUserIn
         return $this->id;
     }
 
+
     /** @see \Serializable::serialize() */
     public function serialize()
     {

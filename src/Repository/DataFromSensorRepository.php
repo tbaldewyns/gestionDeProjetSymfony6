@@ -138,7 +138,10 @@ class DataFromSensorRepository extends ServiceEntityRepository
         if($dataSearch->getFrequence()){
             $query = $query
             ->andWhere('d.sendedAt >= :date');
-            if($dataSearch->getFrequence() == "Week"){
+            if($dataSearch->getFrequence() == "Day"){
+                $query = $query ->setParameter('date', new \DateTime('-1 day'));
+            }
+            else if($dataSearch->getFrequence() == "Week"){
                 $query = $query ->setParameter('date', new \DateTime('-7 days'));
             }
             else if($dataSearch->getFrequence() == "Month"){
