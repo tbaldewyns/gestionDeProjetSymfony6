@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use App\Entity\User;
@@ -179,8 +180,13 @@ class AdminController extends AbstractController
             
         }
         if ($lastData != null){
-            $currentData = new \DateTime("now");
+            //Ajout de deux heures à la date actuelle pour être compatible avec l'heure de la bdd (VPS)
+            //$currentData = new DateTime("now + 2 hours");
+            //Dev
+            $currentData = new DateTime("now");
+            //Récupartion de la date de la dernière donnée reçue
             $dateLastData = $lastData->getSendedAt();
+            //Calcule de l'interval entre les deux dates
             $interval = $currentData->diff($dateLastData);
         }
         

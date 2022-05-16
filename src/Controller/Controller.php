@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Repository\DataFromSensorRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +27,10 @@ class Controller extends AbstractController
             'local' => $local
         ]);
         }
-        $currentData = new \DateTime("now");
+        //Ajout de deux heures à la date actuelle pour être compatible avec l'heure de la bdd (VPS)
+        //$currentData = new DateTime("now + 2 hours");
+        //Dev
+        $currentData = new DateTime("now");
         $dateLastData = $lastData->getSendedAt();
         $interval = $currentData->diff($dateLastData);
         
