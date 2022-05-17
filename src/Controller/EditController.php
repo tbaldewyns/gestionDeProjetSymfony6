@@ -97,10 +97,9 @@ class EditController extends AbstractController
         //Edition du local selon le formulaire
         
         $localForm = $this->createForm(AddLocalType::class, $local);
-
+        
         $localForm->handleRequest($request);
         if ($localForm->isSubmitted() && $localForm->isValid()) {
-
             $manager->getManager()->flush();
             $this->addFlash("success", "Vos informations ont été modifiées");
             return $this->redirectToRoute('settings');

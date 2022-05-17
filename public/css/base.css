@@ -3,6 +3,7 @@
 }
 #locked input{
     background-color: lightgrey;
+    pointer-events: none;
 
 }
 #locked input:hover {

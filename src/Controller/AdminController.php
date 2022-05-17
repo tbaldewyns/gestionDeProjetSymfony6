@@ -183,14 +183,14 @@ class AdminController extends AbstractController
                 $temperatureDataValue[] = $dataForChart->getValue();
                 $temperatureDate[] = $dataForChart->getSendedAt()->format("d-m-y G:i");
 
-            }
-            
-            //Création des variables de pourcentage utilisées dans le graphique en donut    
+            }  
+        }
+
+        //Création des variables de pourcentage utilisées dans le graphique en donut    
             $goodCO2DataPourcentage = round(($goodCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100);
             $midCO2DataPourcentage = round(($midCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100);
             $badCO2DataPourcentage = round(($badCo2Counter/ ($goodCo2Counter+$midCo2Counter+$badCo2Counter)) * 100) ;
         
-        }
         if ($lastData != null){
             //Ajout de deux heures à la date actuelle pour être compatible avec l'heure de la bdd (VPS)
             //$currentData = new DateTime("now + 2 hours");
@@ -264,7 +264,9 @@ class AdminController extends AbstractController
         $dompdf->setHttpContext($context);
 
         $html = $this->renderView('admin/downloadData.html.twig',[
-            'datas' => $datas
+            'datas' => $datas, 
+            'currentDate' => $currentDate->format('Y-m-d H:i:s'),
+            'search' => $search
         ]);
 
         $dompdf->loadHtml($html);

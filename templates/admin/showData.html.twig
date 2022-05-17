@@ -25,16 +25,13 @@
                 <div class="input">
                     {{form_row(searchForm.frequence)}}
                 </div>
-                <div class="input">
-                    {{form_row(searchForm.limit)}}
-                </div>
             </div>
             <div class="btns">
                 <div class="btn">
-                    <button type="submit">Search</button>
+                    <button type="submit">Chercher</button>
                 </div>
                 <div class="btn" id="downloadPdf">
-                    <a href="{{path('downloadData')}}">Download pdf</a>
+                    <a href="{{path('downloadData')}}">Format pdf</a>
                 </div>
             </div>
             {{form_end(searchForm)}}
@@ -84,14 +81,26 @@
                 {% else %}
                     {% for data in datas %}
                     <tr>
-                        {% if data.type.id == 1 %}
-                        <td>{{data.value}} ppm</td>
+                        {% if data.type.id == 1 %}                        
+                            {% if data.value > data.type.maxAlarm or data.value < data.type.minAlarm %}
+                            <td style="color: red;">{{data.value}} ppm</td>
+                            {% else %}
+                            <td>{{data.value}} ppm</td>
+                            {% endif %}
                         {% endif %}
                         {% if data.type.id == 2 %}
-                        <td>{{data.value}} %</td>
+                            {% if data.value > data.type.maxAlarm or data.value < data.type.minAlarm %}
+                            <td style="color: red;">{{data.value}} %</td>
+                            {% else %}
+                            <td>{{data.value}} %</td>
+                            {% endif %}
                         {% endif %}
                         {% if data.type.id == 3 %}
-                        <td>{{data.value}} °C</td>
+                            {% if data.value > data.type.maxAlarm or data.value < data.type.minAlarm %}
+                            <td style="color: red;">{{data.value}} °C</td>
+                            {% else %}
+                            <td>{{data.value}} °C</td>
+                            {% endif %}
                         {% endif %}
                         <td>{{data.type.value}}</td>
                         <td>{{data.local}}</td>

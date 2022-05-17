@@ -5,8 +5,66 @@
 {% endblock %}
 
 {% block body %}
+
+<style>
+    th{
+        background-color: rgba(102, 192, 210, 1);
+        color: white;
+        width: 140px;
+    }
+    hr{
+        width: 80%;
+    }
+    td{
+        border-bottom: 1px solid lightgray;
+    }
+    .header .date{
+        position: absolute;
+        top: 5%;
+        right: 5%;
+    }
+    .search{
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .search div{
+        margin: -20px;
+    }
+
+</style>
 <div class="container">
     <center>
+        <div class="header">
+            {% if search %}
+            <div class="search">
+                <div class="local">
+                    <p>Local :{{search.local}}</p>
+                </div>
+                <div class="type">
+                    <p>Type : {{search.type}}</p>
+                </div>
+                <div class="frequence">
+                    <p>Frequence :
+                    {% if search.frequence == "Day" %}
+                    Dernier jour
+                    {% elseif search.frequence == "Week" %}
+                    Dernière semaine
+                    {% elseif search.frequence == "Month" %}
+                    Dernier mois
+                    {% elseif search.frequence == "Trimsestre" %}
+                    Dernier trimestre
+                    {% elseif search.frequence == "Year" %}
+                    Dernière année
+                    {% endif %}
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+            <div class="date">
+                {{currentDate}}
+            </div>
+        </div>
         <div class="datas">
             <h1 >Tableau de données</h1>
             <hr>
